@@ -1,8 +1,12 @@
-import React from 'react'
+import ImageSlider from '../components/ImageSlider/ImageSlider'
 
 const HomePage = () => {
   return (
-    <div>HomePage</div>
+    <>
+      <div>
+        <ImageSlider />
+      </div>
+    </>
   )
 }
 
