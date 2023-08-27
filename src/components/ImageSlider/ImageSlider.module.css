@@ -1,3 +1,10 @@
+.slider__container {
+  min-height: calc(100vh - 7rem);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .slider_item {
   width: 100%;
   max-height: 550px;
