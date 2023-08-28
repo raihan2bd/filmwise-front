@@ -1,13 +1,23 @@
-import ImageSlider from '../components/ImageSlider/ImageSlider'
+import ImageSlider from "../components/ImageSlider/ImageSlider";
 
 const HomePage = () => {
   return (
     <>
-      <div>
-        <ImageSlider />
-      </div>
+      <ImageSlider />
+      <section className="">
+        <h2>Popular Movies</h2>
+        <div>content</div>
+      </section>
+      <section className="">
+      <h2>Popular Movies</h2>
+        <div>content</div>
+      </section>
+      <section className="">
+      <h2>Popular Movies</h2>
+        <div>content</div>
+      </section>
     </>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;

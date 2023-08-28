@@ -14,5 +14,8 @@ interface MovieType {
 }
 
 interface MoviesResponse {
+  total_count: number;
+  per_page: number;
+  current_page: number;
   movies: Movie[];
 }
