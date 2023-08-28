@@ -1,8 +1,8 @@
 interface CustomErrorType {
   data: {
-    message: string,
-    stack: string,
-
+    error: {
+      message: string
+    },
   },
   status: number
 }
