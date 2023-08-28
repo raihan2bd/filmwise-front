@@ -1,0 +1,28 @@
+.movies_carousel .alice-carousel__dots {
+  display: none;
+}
+
+.movies_carousel .alice-carousel__prev-btn, .movies_carousel .alice-carousel__next-btn {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.801);
+  top: 47%;
+  padding: 0 !important;
+  height: fit-content;
+  font-size: 2rem;
+  z-index: 10;
+  color: brown;
+  width: fit-content;
+}
+
+.movies_carousel .alice-carousel__prev-btn {
+  left: 0;
+}
+
+.movies_carousel .alice-carousel__next-btn {
+  right: 0;
+}
+
+.movies_carousel .alice-carousel__prev-btn-item, .movies_carousel .alice-carousel__next-btn-item {
+  padding: 0 0.5rem;
+}
+
