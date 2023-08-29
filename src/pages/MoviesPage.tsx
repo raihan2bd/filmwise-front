@@ -55,7 +55,6 @@
 
 // export default MoviesPage;
 
-import React, { useState } from "react";
 import { useLocation, useNavigate   } from "react-router-dom";
 import { useGetFilteredMoviesQuery } from "../redux/services/movieApi";
 import Spinner from "../components/UI/Spinner";
@@ -99,7 +98,15 @@ const MoviesPage = () => {
   if (isLoading) {
     content = <Spinner />;
   } else if (isError) {
-    // ... (your error handling code)
+    let errorMessage;
+
+    if ("data" in error && error.data) {
+      errorMessage = error.data.error.message;
+    } else {
+      errorMessage = "An unknown error occurred. Please try again.";
+    }
+
+    content = <p className="text-red-500 text-lg shadow">{errorMessage}</p>;
   } else if (isSuccess && featureMovies.movies) {
     const { total_count, per_page, current_page, movies } = featureMovies;
     const pages = Math.ceil(total_count / per_page);
