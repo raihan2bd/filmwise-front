@@ -1,4 +1,3 @@
-import noThambnail from '../../assets/images/no_thumbnail.jpg';
 import { Link } from 'react-router-dom';
 
 interface PropsType {
@@ -6,6 +5,7 @@ interface PropsType {
 }
 
 const MovieItem = ({item}: PropsType) => {
+  const baseApiUrl = import.meta.env.VITE_API_BASE_URL
   return (
     <li
       className="item bg-white/10 m-2 flex flex-col gap-3 flex-grow max-w-[400px]"
@@ -14,7 +14,7 @@ const MovieItem = ({item}: PropsType) => {
       <div className="overflow-hidden max-w-[100%]">
         <img
           className="max-h-[400px] w-full"
-          src={item.image ? item.image : noThambnail}
+          src={`${baseApiUrl}${item.image}`}
           alt={item.title}
         />
       </div>

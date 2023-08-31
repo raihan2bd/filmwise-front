@@ -1,6 +1,5 @@
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
-import noThambnail from "../../assets/images/no_thumbnail.jpg";
 import { Link } from "react-router-dom";
 
 import './MoviesCarousel.css'
@@ -17,6 +16,8 @@ const MoviesCarousel = ({ movies }: PropsType) => {
     1280: { items: 4 },
   };
 
+  const baseApiUrl = import.meta.env.VITE_API_BASE_URL
+
   const items = movies.map((item: MovieType) => {
     return (
       <div
@@ -27,7 +28,7 @@ const MoviesCarousel = ({ movies }: PropsType) => {
         <div className="overflow-hidden max-w-[100%]">
           <img
             className="max-h-[400px] w-full"
-            src={item.image ? item.image : noThambnail}
+            src={`${baseApiUrl}${item.image}`}
             alt={item.title}
           />
         </div>
