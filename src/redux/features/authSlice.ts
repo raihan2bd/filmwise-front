@@ -1,17 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-export interface UserType {
-  id: string,
-  name: string,
-  role: string,
-}
-
-interface AuthStateType {
-  user: UserType | null
-}
-
 const initialState: AuthStateType = {
-  user: null
+  user: {
+    id: '1',
+    role: 'admin',
+    name: 'admin',
+    token: 'jfkdfkdfkdfkdk'
+  }
 }
 
 const authSlice = createSlice({
