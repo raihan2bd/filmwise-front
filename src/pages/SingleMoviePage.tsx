@@ -1,10 +1,11 @@
-import {useMemo, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useMemo, useCallback } from "react";
+import { useParams, Link } from "react-router-dom";
 
 import { useGetSingleMovieQuery } from "../redux/services/movieApi";
 import Spinner from "../components/UI/Spinner";
 import Button from "../components/UI/Button";
 import AddCommentForm from "../components/Movies/AddCommentForm";
+import { formatDateDefault } from "../utils/utils";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -20,8 +21,8 @@ const SingleMoviePage = () => {
   } = useGetSingleMovieQuery(Number(id));
 
   const addCommentHandler = useCallback((comTxt: string) => {
-    console.log(comTxt)
-  }, [])
+    console.log(comTxt);
+  }, []);
 
   const content = useMemo(() => {
     if (isLoading) {
@@ -66,14 +67,15 @@ const SingleMoviePage = () => {
                 Categories:{" "}
                 <ul className="flex flex-wrap justify-center gap-2 list-none">
                   {Object.entries(movie.genres).map(([genreId, genreName]) => (
-                    <li className="bg-white/5 rounded p-2" key={genreId}>
-                      {genreName}
+                    <li className="bg-white/5 rounded" key={genreId}>
+                      <Link className="p-2 block" to={`/genres/${genreId}`}>{genreName}</Link>
                     </li>
                   ))}
                 </ul>
               </div>
               <p className="flex justify-between gap-2 bg-white/5 p-4">
-                <span>Relese Date:</span> {movie.release_date}
+                <span>Relese Date:</span>{" "}
+                {formatDateDefault(movie.release_date)}
               </p>
               <p className="flex justify-between gap-2 bg-black/50 p-4">
                 <span>RunTime: </span> {movie.runtime} min
@@ -90,8 +92,7 @@ const SingleMoviePage = () => {
           </p>
           <div className="flex flex-col gap-6 justify-center mt-6 md:flex-row">
             <div className="flex-1">
-
-            <AddCommentForm submitHandler={addCommentHandler}/>
+              <AddCommentForm submitHandler={addCommentHandler} />
             </div>
 
             <div className="flex-1 bg-white/5 p-4 md:h-[400px] overflow-y-scroll">
@@ -108,7 +109,7 @@ const SingleMoviePage = () => {
                     <h4 className="flex justify-between px-4 py-2 border-b border-white/20">
                       <span>{comment.user_name}</span>{" "}
                       <span className="text-sm text-white/70">
-                        {comment.commented_at}
+                        {formatDateDefault(comment.commented_at)}
                       </span>
                     </h4>
                     <p
@@ -133,11 +134,7 @@ const SingleMoviePage = () => {
     );
   }, [isLoading, isError, error, isSuccess, movieResponse]);
 
-  return (
-    <article className="p-4 bg-white/10">
-      {content}
-    </article>
-  );
+  return <article className="p-4 bg-white/10">{content}</article>;
 };
 
 export default SingleMoviePage;
