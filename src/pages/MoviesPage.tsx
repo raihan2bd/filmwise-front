@@ -70,21 +70,35 @@ const MoviesPage = () => {
 
   const handleSubmitFilter = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+  
     // Clone the existing query parameters
     const newQueryParams = new URLSearchParams(queryParams);
-
+  
     // Update the cloned query parameters with the new filter values
     newQueryParams.set("limit", filteredState.limit.toString());
-    if (filteredState.order_by)
+  
+    if (filteredState.order_by) {
       newQueryParams.set("order_by", filteredState.order_by);
-    if (filteredState.genre) newQueryParams.set("genre", filteredState.genre);
-    if (filteredState.year)
+    } else {
+      newQueryParams.delete("order_by"); // Remove the parameter if empty
+    }
+  
+    if (filteredState.genre) {
+      newQueryParams.set("genre", filteredState.genre);
+    } else {
+      newQueryParams.delete("genre"); // Remove the parameter if empty
+    }
+  
+    if (filteredState.year) {
       newQueryParams.set("year", filteredState.year.toString());
-
+    } else {
+      newQueryParams.delete("year"); // Remove the parameter if empty
+    }
+  
     // Update the URL with the new query parameters
     navigate(`?${newQueryParams.toString()}`);
   };
+  
 
   const memoizedContent = useMemo(() => {
     if (isLoading) {

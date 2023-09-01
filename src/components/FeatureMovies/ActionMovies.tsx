@@ -21,7 +21,6 @@ const ActionMovies = () => {
 
     content = <p className="text-red-500 text-lg shadow">{errorMessage}</p>
   } else if(isSuccess && featureMovies.movies) {
-    console.log(featureMovies)
     content = <MoviesCarousel movies={featureMovies.movies} />
   }
 

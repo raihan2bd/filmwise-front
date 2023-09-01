@@ -7,12 +7,18 @@ export const moviesApi = createApi({
   baseQuery: fetchBaseQuery({baseUrl: baseApiUrl}) as BaseQueryFn<string | FetchArgs, unknown, CustomErrorType, {}>,
   tagTypes: ['Movies-API'],
   endpoints: (builder) => ({
+     
     getFilteredMovies: builder.query<MoviesResponse, string>({
       query: (url) => `${baseApiUrl}/${url}`,
     }),
+
+    getSingleMovie: builder.query<MovieResponse, number>({
+      query: (id) => `${baseApiUrl}/movie/get_one/${id}`
+    })
   })
 })
 
 export const {
- useGetFilteredMoviesQuery
+ useGetFilteredMoviesQuery,
+ useGetSingleMovieQuery,
 } = moviesApi;
