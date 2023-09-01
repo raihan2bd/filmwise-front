@@ -19,5 +19,6 @@ export const moviesApi = createApi({
 })
 
 export const {
- useGetFilteredMoviesQuery
+ useGetFilteredMoviesQuery,
+ useGetSingleMovieQuery,
 } = moviesApi;
