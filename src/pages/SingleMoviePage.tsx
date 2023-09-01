@@ -54,8 +54,9 @@ const SingleMoviePage = () => {
             tempora dolore ex dicta recusandae excepturi at. Esse voluptates
             eius quod maxime a nesciunt, quidem ipsa velit quos doloremque hic.
       </p>
-      <div className="flex gap-6 justify-center mt-6 flex-wrap-reverse">
-        <form className="w-full md:w-[45%] flex flex-col gap-2 bg-black/50 p-4">
+      <div className="flex flex-col gap-6 justify-center mt-6 md:flex-row">
+        
+      <form className="w-full flex flex-col gap-2 bg-black/50 p-4">
           <h4>Add a new Comment</h4>
           <div>
 
@@ -67,14 +68,15 @@ const SingleMoviePage = () => {
           </div>
           <button className="block ms-auto w-fit text-sm bg-lime-500 px-4 py-2 rounded-sm">Submit</button>
         </form>
-        <div className="flex-grow bg-white/5 p-4">
+
+        <div className="bg-white/5 p-4 md:h-[400px] overflow-y-scroll">
         <h4 className="text-center text-lg font-bold border-b-2 border-yellow-500 py-2 mb-4">Recent Comments (10)</h4>
-        <ul className="list-none md: h-[400px] overscroll-y-auto">
-          <li>fjkdlfdkflkdflkdfkl</li>
-          <li>jfkldjfkdjfkd</li>
-          <li>jfkldjfkdjfkd</li>
-          <li>jfkldjfkdjfkd</li>
-          <li>jfkldjfkdjfkd</li>
+
+        <ul className="list-none">
+          <li className="flex flex-col gap-1 bg-black/50 rounded my-3">
+            <h4 className="flex justify-between px-4 py-2 border-b border-white/20"><span>Abu Raihan</span> <span className="text-sm text-white/70">26 jan 2023</span></h4>
+            <p className="break-words p-4 pt-2" style={{wordBreak: 'break-all'}}>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Numquam accusamus voluptatibus voluptas necessitatibus similique hic quibusdam, error inventore cum, dolore ex rem aliquam dolores odio corporis cumque ducimus pariatur sed?</p>
+          </li>
         </ul>
         </div>
       </div>
