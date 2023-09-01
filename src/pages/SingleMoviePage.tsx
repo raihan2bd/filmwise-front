@@ -89,9 +89,12 @@ const SingleMoviePage = () => {
             {movie.description}
           </p>
           <div className="flex flex-col gap-6 justify-center mt-6 md:flex-row">
-            <AddCommentForm submitHandler={addCommentHandler}/>
+            <div className="flex-1">
 
-            <div className="bg-white/5 p-4 md:h-[400px] overflow-y-scroll">
+            <AddCommentForm submitHandler={addCommentHandler}/>
+            </div>
+
+            <div className="flex-1 bg-white/5 p-4 md:h-[400px] overflow-y-scroll">
               <h4 className="text-center text-lg font-bold border-b-2 border-yellow-500 py-2 mb-4">
                 Recent Comments ({movie.total_comments})
               </h4>
