@@ -1,12 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState: AuthStateType = {
-  user: {
-    id: '1',
-    role: 'admin',
-    name: 'admin',
-    token: 'jfkdfkdfkdfkdk'
-  }
+  user: null
 }
 
 const authSlice = createSlice({
