@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
 import { FormEvent } from 'react';
 import Input from '../UI/Input';
 import Button from '../UI/Button';
 import { Link } from 'react-router-dom';
 import { validateEmail, validatePassword } from '../../utils/validator';
+import useInput from '../../hooks/useInput'; // Import the useInput hook
 
 type PropsType = {
   isLogin: boolean;
@@ -11,44 +11,45 @@ type PropsType = {
 };
 
 const LoginForm = ({ isLogin, onSubmitHandler }: PropsType) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isEmailError, setIsEmailError] = useState<string | null>(null);
-  const [isPasswordError, setIsPasswordError] = useState<string | null>(null);
-  const [isFormTouched, setIsFormTouched] = useState(false);
-
-  // Function to validate the form fields
-  const validateForm = () => {
-    const isEmail = validateEmail(email);
-    const isPassword = validatePassword(password);
-    setIsEmailError(isEmail.isValid ? null : isEmail.errorMsg || 'Invalid Email!');
-    setIsPasswordError(isPassword.isValid ? null : isPassword.errorMsg || 'Invalid Password!');
+  // Define validation functions for email and password
+  const validateEmailInput = (value: string) => {
+    const isEmail = validateEmail(value);
+    return isEmail.isValid ? null : isEmail.errorMsg || 'Invalid Email!';
   };
 
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setEmail(value);
-    setIsFormTouched(true);
+  const validatePasswordInput = (value: string) => {
+    const isPassword = validatePassword(value);
+    return isPassword.isValid ? null : isPassword.errorMsg || 'Invalid Password!';
   };
 
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setPassword(value);
-    setIsFormTouched(true);
-  };
+  // Initialize useInput for email and password
+  const {
+    value: email,
+    isValid: isEmailValid,
+    errorMsg: emailError,
+    isTouched: isEmailTouched,
+    valueChangeHandler: emailChangeHandler,
+    inputBlurHandler: emailBlurHandler,
+  } = useInput(validateEmailInput);
+
+  const {
+    value: password,
+    isValid: isPasswordValid,
+    errorMsg: passwordError,
+    isTouched: isPasswordTouched,
+    valueChangeHandler: passwordChangeHandler,
+    inputBlurHandler: passwordBlurHandler,
+  } = useInput(validatePasswordInput);
 
   const formSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Set the form as touched
-    setIsFormTouched(true)
-
-    // Validate the form 
-    
-    validateForm();
+    // Validate the form fields
+    emailBlurHandler(); // Mark email as touched
+    passwordBlurHandler(); // Mark password as touched
 
     // Check if the form is valid
-    if (!isEmailError && !isPasswordError) {
+    if (isEmailValid && isPasswordValid) {
       onSubmitHandler(email, password);
     }
   };
@@ -64,22 +65,22 @@ const LoginForm = ({ isLogin, onSubmitHandler }: PropsType) => {
       <Input
         name="email"
         label="Email"
-        inputError={isFormTouched ? isEmailError : null}
+        inputError={isEmailTouched? emailError : null}
         type="email"
         value={email}
-        onChange={handleEmailChange}
+        onChange={emailChangeHandler}
+        onBlur={emailBlurHandler}
         placeholder="Enter your email here."
-        required
       />
       <Input
         type="password"
         label="Password"
         name="password"
-        inputError={isFormTouched ? isPasswordError : null}
+        inputError={isPasswordTouched ? passwordError : null}
         value={password}
-        onChange={handlePasswordChange}
+        onChange={passwordChangeHandler}
+        onBlur={passwordBlurHandler}
         placeholder="Enter your password here."
-        required
       />
       <Button type="submit" btnClass="mt-4 text-xl">
         {isLogin ? 'Login' : 'Signup'}
