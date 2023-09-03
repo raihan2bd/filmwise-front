@@ -2,16 +2,21 @@ import { FormEvent } from 'react';
 import Input from '../UI/Input';
 import Button from '../UI/Button';
 import { Link } from 'react-router-dom';
-import { validateEmail, validatePassword } from '../../utils/validator';
+import { validateEmail, validatePassword, validateFullName } from '../../utils/validator';
 import useInput from '../../hooks/useInput'; // Import the useInput hook
 
 type PropsType = {
-  onSubmitHandler: (email: string, password: string) => void;
+  onSubmitHandler: (name: string, email: string, password: string) => void;
   redirectUrl: string | null;
 };
 
-const LoginForm = ({ onSubmitHandler, redirectUrl }: PropsType) => {
+const SignupForm = ({ onSubmitHandler, redirectUrl }: PropsType) => {
   // Define validation functions for email and password
+  const validateNameInput = (value: string) => {
+    const isName = validateFullName(value);
+    return isName.isValid ? null : isName.errorMsg || 'Invalid Name!';
+  };
+
   const validateEmailInput = (value: string) => {
     const isEmail = validateEmail(value);
     return isEmail.isValid ? null : isEmail.errorMsg || 'Invalid Email!';
@@ -22,7 +27,15 @@ const LoginForm = ({ onSubmitHandler, redirectUrl }: PropsType) => {
     return isPassword.isValid ? null : isPassword.errorMsg || 'Invalid Password!';
   };
 
-  // Initialize useInput for email and password
+  // Initialize useInput for name, email and password
+  const {
+    value: name,
+    errorMsg: nameError,
+    isTouched: isNameTouched,
+    valueChangeHandler: nameChangeHandler,
+    inputBlurHandler: nameBlurHandler,
+  } = useInput(validateNameInput);
+  
   const {
     value: email,
     errorMsg: emailError,
@@ -50,7 +63,7 @@ const LoginForm = ({ onSubmitHandler, redirectUrl }: PropsType) => {
 
     // Check if the form is valid
     if (formIsValid) {
-      onSubmitHandler(email, password);
+      onSubmitHandler("", email, password);
     }
   };
 
@@ -60,8 +73,18 @@ const LoginForm = ({ onSubmitHandler, redirectUrl }: PropsType) => {
       onSubmit={formSubmitHandler}
     >
       <h3 className="text-center text-white text-2xl font-bold my-2">
-        Login to your account
+        Create a new accrount
       </h3>
+      <Input
+        name="name"
+        label="Name"
+        inputError={isNameTouched? nameError : null}
+        type="text"
+        value={name}
+        onChange={nameChangeHandler}
+        onBlur={nameBlurHandler}
+        placeholder="Enter your fullname here."
+      />
       <Input
         name="email"
         label="Email"
@@ -83,16 +106,16 @@ const LoginForm = ({ onSubmitHandler, redirectUrl }: PropsType) => {
         placeholder="Enter your password here."
       />
       <Button type="submit" btnClass="mt-4 text-xl" disabled={!formIsValid}>
-        Login
+        Signup
       </Button>
       <p className="bg-black/50 p-4 text-center">
-        If you don't have an account, please{' '}
-        <Link className="text-sky-500 font-bold" to={`${redirectUrl? `/auth?signup=true&callback=${redirectUrl}`: '/auth?signup=true'}`}>
-          Signup.
+        If you already have an accrount please{' '}
+        <Link className="text-sky-500 font-bold" to={`${redirectUrl? `/auth?callback=${redirectUrl}`: '/auth'}`}>
+          Login
         </Link>
       </p>
     </form>
   );
 };
 
-export default LoginForm;
+export default SignupForm;

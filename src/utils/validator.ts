@@ -93,3 +93,40 @@ export const validatePassword = (password: string, minLength: number = 8): Passw
   };
 };
 
+
+interface FullNameValidationResult {
+  isValid: boolean;
+  errorMsg?: string;
+}
+
+export const validateFullName = (fullName: string, minLength: number = 5, maxLength: number = 55): FullNameValidationResult => {
+  // Regular expression pattern for full name
+  const fullNamePattern = /^([A-Z][a-z]{1,})(\s[A-Z][a-z]{1,})+$/;
+
+  if (fullName.length < minLength) {
+    return {
+      isValid: false,
+      errorMsg: `Full Name must be at least ${minLength} characters long.`,
+    };
+  }
+
+  if (fullName.length > maxLength) {
+    return {
+      isValid: false,
+      errorMsg: `Full Name cannot exceed ${maxLength} characters.`,
+    };
+  }
+
+  if (!fullNamePattern.test(fullName)) {
+    return {
+      isValid: false,
+      errorMsg: 'Invalid full name format.',
+    };
+  }
+
+  return {
+    isValid: true,
+  };
+};
+
+
