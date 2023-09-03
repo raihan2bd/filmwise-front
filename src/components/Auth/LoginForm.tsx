@@ -25,7 +25,6 @@ const LoginForm = ({ isLogin, onSubmitHandler }: PropsType) => {
   // Initialize useInput for email and password
   const {
     value: email,
-    isValid: isEmailValid,
     errorMsg: emailError,
     isTouched: isEmailTouched,
     valueChangeHandler: emailChangeHandler,
@@ -34,22 +33,23 @@ const LoginForm = ({ isLogin, onSubmitHandler }: PropsType) => {
 
   const {
     value: password,
-    isValid: isPasswordValid,
     errorMsg: passwordError,
     isTouched: isPasswordTouched,
     valueChangeHandler: passwordChangeHandler,
     inputBlurHandler: passwordBlurHandler,
   } = useInput(validatePasswordInput);
 
+  let formIsValid = false
+
+  if(!emailError && !passwordError) {
+    formIsValid = true
+  }
+
   const formSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Validate the form fields
-    emailBlurHandler(); // Mark email as touched
-    passwordBlurHandler(); // Mark password as touched
-
     // Check if the form is valid
-    if (isEmailValid && isPasswordValid) {
+    if (formIsValid) {
       onSubmitHandler(email, password);
     }
   };
@@ -82,7 +82,7 @@ const LoginForm = ({ isLogin, onSubmitHandler }: PropsType) => {
         onBlur={passwordBlurHandler}
         placeholder="Enter your password here."
       />
-      <Button type="submit" btnClass="mt-4 text-xl">
+      <Button type="submit" btnClass="mt-4 text-xl" disabled={!formIsValid}>
         {isLogin ? 'Login' : 'Signup'}
       </Button>
       <p className="bg-black/50 p-4 text-center">
