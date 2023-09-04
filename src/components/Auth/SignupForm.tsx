@@ -1,9 +1,10 @@
-import { FormEvent } from 'react';
+import { FormEvent, useEffect } from 'react';
 import Input from '../UI/Input';
 import Button from '../UI/Button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { validateEmail, validatePassword, validateFullName } from '../../utils/validator';
 import useInput from '../../hooks/useInput'; // Import the useInput hook
+import { useAppSelector } from '../../hooks/typeHooks';
 
 type PropsType = {
   onSubmitHandler: (name: string, email: string, password: string) => void;
@@ -12,6 +13,9 @@ type PropsType = {
 
 const SignupForm = ({ onSubmitHandler, redirectUrl }: PropsType) => {
   // Define validation functions for email and password
+  const userId = useAppSelector((state) => state.auth.userId)
+  const navigate = useNavigate()
+
   const validateNameInput = (value: string) => {
     const isName = validateFullName(value);
     return isName.isValid ? null : isName.errorMsg || 'Invalid Name!';
@@ -63,9 +67,15 @@ const SignupForm = ({ onSubmitHandler, redirectUrl }: PropsType) => {
 
     // Check if the form is valid
     if (formIsValid) {
-      onSubmitHandler("", email, password);
+      onSubmitHandler(name, email, password);
     }
   };
+
+  useEffect(() => {
+    if(userId) {
+      navigate(redirectUrl? `/auth?callback=${redirectUrl}`: '/auth', {replace: true})
+    }
+  }, [userId])
 
   return (
     <form
