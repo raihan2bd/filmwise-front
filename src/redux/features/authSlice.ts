@@ -46,7 +46,6 @@ export const fetchLogin = createAsyncThunk(
       });
 
       const token = response.data.token;
-      console.log(token);
       const decodedToken: {
         name: string;
         user_type: string;
@@ -74,7 +73,6 @@ export const fetchLogin = createAsyncThunk(
     } catch (err) {
       const error: AxiosError<CustomAxiosErrorType | any> = err as any;
       let errMsg = "Something went wrong. Please try again.";
-      console.log(error.response);
       const errResponse = error.response?.data;
       if (errResponse) {
         errMsg = errResponse.message;
@@ -94,7 +92,6 @@ export const fetchSignup = createAsyncThunk(
         `${baseApiUrl}/user/signup/`,
         userPayload
       );
-      console.log(response.data);
 
       return { userId: response.data.id || 1 };
     } catch (err) {

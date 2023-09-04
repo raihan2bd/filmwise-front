@@ -8,7 +8,6 @@ import SignupForm from '../components/Auth/SignupForm'
 
 const AuthPage = () => {
   const user = useAppSelector((state) => state.auth.user)
-  console.log(user)
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch()
