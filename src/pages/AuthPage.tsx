@@ -1,15 +1,17 @@
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { RootStoreType } from '../redux/store'
+import {fetchSignup, fetchLogin} from '../redux/features/authSlice';
+import { useAppDispatch, useAppSelector } from '../hooks/typeHooks';
 
 import LoginForm from '../components/Auth/LoginForm'
 import SignupForm from '../components/Auth/SignupForm'
 
 const AuthPage = () => {
-  const user = useSelector((state: RootStoreType) => state.auth.user)
+  const user = useAppSelector((state) => state.auth.user)
+  console.log(user)
 
   const navigate = useNavigate();
+  const dispatch = useAppDispatch()
 
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
@@ -18,13 +20,14 @@ const AuthPage = () => {
 
 
   const handleLogin = (email: string, password: string) => {
-    console.log("I am login", email, password)
-    navigate(redirectUrl || '/', {replace: true})
+    dispatch(fetchLogin({email, password}))
   }
 
   const handleSignup = (name: string, email: string, password: string) => {
-    console.log("I'm signup", name, email, password)
-    navigate(redirectUrl || '/', {replace: true})
+    const userPayload: UserSignupDataType =  {
+      full_name: name, email, password
+    }
+    dispatch(fetchSignup(userPayload))
   }
 
   useEffect(() => {
@@ -33,7 +36,7 @@ const AuthPage = () => {
       navigate(redirectUrl || '/', {replace: true})
       return
     }
-  }, [])
+  }, [user])
 
 
   return (
