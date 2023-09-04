@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { useState, useRef, FormEvent } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FiMenu, FiX, FiSearch } from "react-icons/fi";
 import Button from "../UI/Button";
 
@@ -8,6 +8,9 @@ import "./Header.css";
 const Header = () => {
   const [showNav, setShowNav] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
+
+  const navigate = useNavigate();
 
   const toggleNavHandler = () => {
     setShowNav((prevState) => !prevState);
@@ -21,13 +24,23 @@ const Header = () => {
     setShowSearch(false);
   };
 
+  const submitSearchHandler = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const value: string | undefined = searchInputRef.current?.value
+    if(value && value !== '') {
+      navigate(`/movies?s=${value}`)
+    }
+  };
+
   return (
     <header className="header bg-dark color-white d-flex jc-space-between align-items-center">
       <div className="brand d-flex align-items-center">
         <button className="mob-menu sm-content" onClick={toggleNavHandler}>
           {!showNav ? <FiMenu /> : <FiX />}
         </button>
-        <Link to="/" className="brand-name">FilmWise</Link>
+        <Link to="/" className="brand-name">
+          FilmWise
+        </Link>
       </div>
       <nav className="nav-bar d-flex gap-1">
         <ul
@@ -53,7 +66,7 @@ const Header = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink className="nav-link" to="/login">
+            <NavLink className="nav-link" to="/auth">
               Login
             </NavLink>
           </li>
@@ -71,30 +84,29 @@ const Header = () => {
               >
                 X
               </button>
-              <form action="#" className="search-item d-flex">
+              <form
+                onSubmit={submitSearchHandler}
+                className="search-item d-flex"
+              >
                 <input
                   className="search-input"
                   type="search"
                   placeholder="Search movies..."
+                  ref={searchInputRef}
                 />
-                <Button
-                  btnClass="btn-search-toggle"
-                  type="submit"
-                  onClickHandler={() => {
-                    console.log("I am working!");
-                  }}
-                >
+                <Button btnClass="btn-search-toggle" type="submit">
                   <FiSearch />
                 </Button>
               </form>
             </div>
           )}
         </div>
-        <form action="#" className="search-item d-flex md-content">
+        <form  onSubmit={submitSearchHandler} className="search-item d-flex md-content">
           <input
             className="search-input"
             type="search"
             placeholder="Search movies..."
+            ref={searchInputRef}
           />
           <button type="submit" className="btn-search-toggle">
             <FiSearch />
