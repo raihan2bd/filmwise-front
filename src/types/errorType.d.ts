@@ -6,3 +6,10 @@ interface CustomErrorType {
   },
   status: number
 }
+
+interface CustomAxiosErrorType {
+    error: {
+      message: string
+    },
+  status: number
+}
