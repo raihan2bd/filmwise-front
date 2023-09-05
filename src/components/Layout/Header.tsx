@@ -2,14 +2,19 @@ import { useState, useRef, FormEvent } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FiMenu, FiX, FiSearch } from "react-icons/fi";
 import Button from "../UI/Button";
+import { logoutAction } from "../../redux/features/authSlice";
 
 import "./Header.css";
+import { useAppDispatch, useAppSelector } from "../../hooks/typeHooks";
 
 const Header = () => {
   const [showNav, setShowNav] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
+  const user = useAppSelector((state) => state.auth.user)
+  
 
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const toggleNavHandler = () => {
@@ -65,11 +70,15 @@ const Header = () => {
               About
             </NavLink>
           </li>
+          {user?.role === 'admin' && <li><NavLink className="nav-link" to="/add-new-movie">
+              Add Movie
+            </NavLink></li> }
           <li>
-            <NavLink className="nav-link" to="/auth">
+            {!user || !user?.id ? <NavLink className="nav-link" to="/auth">
               Login
-            </NavLink>
+            </NavLink>: <Button btnClass="bg-red-500" onClick={() => dispatch(logoutAction())}>Logout</Button>}
           </li>
+          
         </ul>
 
         <div className="sm-content">
