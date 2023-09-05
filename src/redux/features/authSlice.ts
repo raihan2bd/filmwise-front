@@ -1,10 +1,8 @@
-import { createSlice, createAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import jwtDecode from "jwt-decode";
 
 const baseApiUrl = import.meta.env.VITE_API_BASE_URL;
-
-export const logoutAction = createAction("auth/logout");
 
 const logout = () => {
   localStorage.removeItem("user");
@@ -126,15 +124,13 @@ const initialState: AuthStateType = {
 const authSlice = createSlice({
   name: "auth-slice",
   initialState,
-  reducers: {},
+  reducers: {
+    logoutAction() {
+      localStorage.removeItem('user')
+      return initialState
+    }
+  },
   extraReducers: (builder) => {
-    builder.addCase(logoutAction, (state) => {
-      const updatedState = {
-        ...state,
-        ...logout(),
-      };
-      return updatedState;
-    });
 
     builder.addCase(fetchSignup.fulfilled, (state, { payload }) => {
       if (payload.userId) {
@@ -170,5 +166,7 @@ const authSlice = createSlice({
     });
   },
 });
+
+export const { logoutAction } = authSlice.actions
 
 export default authSlice.reducer;

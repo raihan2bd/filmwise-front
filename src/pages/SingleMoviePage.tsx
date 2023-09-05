@@ -1,16 +1,20 @@
 import { useMemo, useCallback } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useGetSingleMovieQuery } from "../redux/services/movieApi";
 import Spinner from "../components/UI/Spinner";
 import Button from "../components/UI/Button";
 import AddCommentForm from "../components/Movies/AddCommentForm";
 import { formatDateDefault } from "../utils/utils";
+import { useAppSelector } from "../hooks/typeHooks";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const SingleMoviePage = () => {
   const { id } = useParams();
+  const user = useAppSelector((state) => state.auth.user);
+  const { pathname, search } = useLocation();
+  const navigate = useNavigate();
 
   const {
     isLoading,
@@ -20,9 +24,40 @@ const SingleMoviePage = () => {
     error,
   } = useGetSingleMovieQuery(Number(id));
 
-  const addCommentHandler = useCallback((comTxt: string) => {
-    console.log(comTxt);
-  }, []);
+  const deleteMovieHandler = (id: number) => {
+    console.log(id);
+  };
+
+  const editMovieHandler = (id: number) => {
+    console.log(id);
+  };
+
+  const handleAddFavorite = (id: number) => {
+    if (!user?.id) {
+      navigate(`/auth?callback=${pathname}${search}`);
+      return;
+    }
+    console.log(id);
+  };
+
+  const handleAddRating = (id: number) => {
+    if (!user?.id) {
+      navigate(`/auth?callback=${pathname}${search}`);
+      return;
+    }
+    console.log(id);
+  };
+
+  const handleAddComment = useCallback(
+    (comTxt: string) => {
+      if (!user?.id) {
+        navigate(`/auth?callback=${pathname}${search}`);
+        return;
+      }
+      console.log(comTxt);
+    },
+    [pathname, search]
+  );
 
   const content = useMemo(() => {
     if (isLoading) {
@@ -50,13 +85,36 @@ const SingleMoviePage = () => {
               />
             </div>
             <div className="flex flex-col gap-4 w-full md:w-[33%] flex-grow">
+              {user?.role === "admin" && (
+                <p className="flex justify-between gap-2 bg-white/5 p-4">
+                  <Button
+                    btnClass="bg-red-500"
+                    onClick={() => deleteMovieHandler(movie.id)}
+                  >
+                    Delete
+                  </Button>
+                  <Button
+                    btnClass="bg-yellow-500"
+                    onClick={() => editMovieHandler(movie.id)}
+                  >
+                    Edit
+                  </Button>
+                </p>
+              )}
+
               <h3 className="text-2xl text-yellow-500 font-extrabold p-4">
                 {movie.title} ({movie.year})
               </h3>
+
               <p className="flex justify-between gap-2 bg-white/5 p-4">
-                <Button>Add Favorite</Button>
-                <Button>Add Rating</Button>
+                <Button onClick={() => handleAddFavorite(movie.id)}>
+                  Add Favorite
+                </Button>
+                <Button onClick={() => handleAddRating(movie.id)}>
+                  Add Rating
+                </Button>
               </p>
+
               <p className="flex flex-wrap justify-between gap-2 bg-black/50 p-4">
                 <span>Favorite: </span> {movie.total_favorites}
               </p>
@@ -68,7 +126,9 @@ const SingleMoviePage = () => {
                 <ul className="flex flex-wrap justify-center gap-2 list-none">
                   {Object.entries(movie.genres).map(([genreId, genreName]) => (
                     <li className="bg-white/5 rounded" key={genreId}>
-                      <Link className="p-2 block" to={`/genres/${genreId}`}>{genreName}</Link>
+                      <Link className="p-2 block" to={`/genres/${genreId}`}>
+                        {genreName}
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -92,7 +152,7 @@ const SingleMoviePage = () => {
           </p>
           <div className="flex flex-col gap-6 justify-center mt-6 md:flex-row">
             <div className="flex-1">
-              <AddCommentForm submitHandler={addCommentHandler} />
+              <AddCommentForm submitHandler={handleAddComment} />
             </div>
 
             <div className="flex-1 bg-white/5 p-4 md:h-[400px] overflow-y-scroll">
