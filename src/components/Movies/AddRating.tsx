@@ -29,11 +29,11 @@ const AddRating: React.FC<RatingProps> = ({
 
   return (
     <>
-    <div className="rating flex-col items-center justify-center w-fit mx-auto gap-2 text-center">
+    <div className="rating flex-col items-center justify-center w-fit mx-auto text-center">
       {Array.from({ length: maxStars }, (_, index) => (
         <span
           key={index}
-          className={`star text-2xl cursor-pointer ${
+          className={`star text-3xl cursor-pointer ${
             index < (rating || 0) ? "text-yellow-400" : "text-gray-400"
           }`}
           onClick={() => handleStarClick(index)}
@@ -42,7 +42,7 @@ const AddRating: React.FC<RatingProps> = ({
         </span>
       ))}
       <p className="rating-text ml-2">
-        {rating !== null ? `${rating} stars` : "Please rate"}
+        {rating !== null ? `${rating}/${maxStars} stars` : "Please rate"}
       </p>
       </div>
       <div className="w-full flex items-center justify-between mt-4">
