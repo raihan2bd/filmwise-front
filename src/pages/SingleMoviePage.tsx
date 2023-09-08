@@ -1,18 +1,19 @@
 import { useMemo, useCallback, useState } from "react";
 import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
-
+import { useAppSelector } from "../hooks/typeHooks";
 import { useGetSingleMovieQuery } from "../redux/services/movieApi";
+
 import Spinner from "../components/UI/Spinner";
 import Button from "../components/UI/Button";
 import AddCommentForm from "../components/Movies/AddCommentForm";
 import { formatDateDefault } from "../utils/utils";
-import { useAppSelector } from "../hooks/typeHooks";
 import Modal from "../components/UI/Modal";
+import AddRating from "../components/Movies/AddRating";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const SingleMoviePage = () => {
-  const [showRatingModal, setShowRatingModal] = useState(false)
+  const [showRatingModal, setShowRatingModal] = useState(true)
 
 
   const { id } = useParams();
@@ -57,12 +58,13 @@ const SingleMoviePage = () => {
     console.log(id);
   };
 
-  const handleAddRating = (id: number) => {
+  const handleAddRating = (rating: number) => {
     if (!user?.id) {
       navigate(`/auth?callback=${pathname}${search}`);
       return;
     }
-    console.log(id);
+    setShowRatingModal(false)
+    console.log(rating, movieResponse?.movie.id);
   };
 
   const handleAddComment = useCallback(
@@ -213,7 +215,7 @@ const SingleMoviePage = () => {
 
   return <article className="p-4 bg-white/10">
     {content}
-    {showRatingModal && <Modal onHandleClick={hideRatingModalHandler}><h4>Add Rating</h4></Modal>}
+    {showRatingModal && <Modal onHandleClick={hideRatingModalHandler}><AddRating maxStars={10} onCancel={hideRatingModalHandler} onAddRating={handleAddRating} /></Modal>}
     </article>;
 };
 
