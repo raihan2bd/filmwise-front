@@ -215,7 +215,7 @@ const SingleMoviePage = () => {
 
   return <article className="p-4 bg-white/10">
     {content}
-    {showRatingModal && <Modal onHandleClick={hideRatingModalHandler}><AddRating maxStars={10} onCancel={hideRatingModalHandler} onAddRating={handleAddRating} /></Modal>}
+    {showRatingModal && movieResponse?.movie.id && <Modal onHandleClick={hideRatingModalHandler}><AddRating maxStars={10} setShowRatingModal={setShowRatingModal} movieId={movieResponse?.movie?.id} /></Modal>}
     </article>;
 };
 
