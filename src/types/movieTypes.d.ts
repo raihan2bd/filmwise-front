@@ -32,3 +32,14 @@ interface MoviesResponse {
   current_page: number;
   movies: MovieType[];
 }
+
+interface UpdateRatingResponse {
+  ok: boolean;
+  id: number;
+  message: string;
+};
+
+interface RatingInputType {
+  rating: number;
+  movie_id: number;
+}

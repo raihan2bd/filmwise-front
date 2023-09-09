@@ -1,16 +1,21 @@
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useState } from "react";
 import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
-
+import { useAppSelector } from "../hooks/typeHooks";
 import { useGetSingleMovieQuery } from "../redux/services/movieApi";
+
 import Spinner from "../components/UI/Spinner";
 import Button from "../components/UI/Button";
 import AddCommentForm from "../components/Movies/AddCommentForm";
 import { formatDateDefault } from "../utils/utils";
-import { useAppSelector } from "../hooks/typeHooks";
+import Modal from "../components/UI/Modal";
+import AddRating from "../components/Movies/AddRating";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const SingleMoviePage = () => {
+  const [showRatingModal, setShowRatingModal] = useState(true)
+
+
   const { id } = useParams();
   const user = useAppSelector((state) => state.auth.user);
   const { pathname, search } = useLocation();
@@ -23,6 +28,19 @@ const SingleMoviePage = () => {
     data: movieResponse,
     error,
   } = useGetSingleMovieQuery(Number(id));
+
+
+  const hideRatingModalHandler = () => {
+    setShowRatingModal(false)
+  }
+
+  const showRatingModalHandler = () => {
+    if (!user?.id) {
+      navigate(`/auth?callback=${pathname}${search}`);
+      return;
+    }
+    setShowRatingModal(true)
+  }
 
   const deleteMovieHandler = (id: number) => {
     console.log(id);
@@ -40,12 +58,13 @@ const SingleMoviePage = () => {
     console.log(id);
   };
 
-  const handleAddRating = (id: number) => {
+  const handleAddRating = (rating: number) => {
     if (!user?.id) {
       navigate(`/auth?callback=${pathname}${search}`);
       return;
     }
-    console.log(id);
+    setShowRatingModal(false)
+    console.log(rating, movieResponse?.movie.id);
   };
 
   const handleAddComment = useCallback(
@@ -110,7 +129,7 @@ const SingleMoviePage = () => {
                 <Button onClick={() => handleAddFavorite(movie.id)}>
                   Add Favorite
                 </Button>
-                <Button onClick={() => handleAddRating(movie.id)}>
+                <Button onClick={showRatingModalHandler}>
                   Add Rating
                 </Button>
               </p>
@@ -194,7 +213,10 @@ const SingleMoviePage = () => {
     );
   }, [isLoading, isError, error, isSuccess, movieResponse]);
 
-  return <article className="p-4 bg-white/10">{content}</article>;
+  return <article className="p-4 bg-white/10">
+    {content}
+    {showRatingModal && movieResponse?.movie.id && <Modal onHandleClick={hideRatingModalHandler}><AddRating maxStars={10} setShowRatingModal={setShowRatingModal} movieId={movieResponse?.movie?.id} /></Modal>}
+    </article>;
 };
 
 export default SingleMoviePage;
