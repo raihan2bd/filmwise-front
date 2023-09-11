@@ -13,8 +13,7 @@ import AddRating from "../components/Movies/AddRating";
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const SingleMoviePage = () => {
-  const [showRatingModal, setShowRatingModal] = useState(true)
-
+  const [showRatingModal, setShowRatingModal] = useState(false);
 
   const { id } = useParams();
   const user = useAppSelector((state) => state.auth.user);
@@ -29,18 +28,17 @@ const SingleMoviePage = () => {
     error,
   } = useGetSingleMovieQuery(Number(id));
 
-
   const hideRatingModalHandler = () => {
-    setShowRatingModal(false)
-  }
+    setShowRatingModal(false);
+  };
 
   const showRatingModalHandler = () => {
-    if (!user?.id) {
+    if (!user || !user.id) {
       navigate(`/auth?callback=${pathname}${search}`);
       return;
     }
-    setShowRatingModal(true)
-  }
+    setShowRatingModal(true);
+  };
 
   const deleteMovieHandler = (id: number) => {
     console.log(id);
@@ -63,7 +61,7 @@ const SingleMoviePage = () => {
       navigate(`/auth?callback=${pathname}${search}`);
       return;
     }
-    setShowRatingModal(false)
+    setShowRatingModal(false);
     console.log(rating, movieResponse?.movie.id);
   };
 
@@ -83,9 +81,9 @@ const SingleMoviePage = () => {
       return <Spinner />;
     } else if (isError) {
       let errorMessage;
-
-      if ("data" in error && error.data) {
-        errorMessage = error.data.error.message;
+      const err = error as CustomErrorType;
+      if (err.data.error.message) {
+        errorMessage = err.data.error.message;
       } else {
         errorMessage = "An unknown error occurred. Please try again.";
       }
@@ -129,7 +127,9 @@ const SingleMoviePage = () => {
                 <Button onClick={() => handleAddFavorite(movie.id)}>
                   Add Favorite
                 </Button>
-                <Button onClick={showRatingModalHandler}>
+                <Button
+                  onClick={showRatingModalHandler}
+                >
                   Add Rating
                 </Button>
               </p>
@@ -213,10 +213,20 @@ const SingleMoviePage = () => {
     );
   }, [isLoading, isError, error, isSuccess, movieResponse]);
 
-  return <article className="p-4 bg-white/10">
-    {content}
-    {showRatingModal && movieResponse?.movie.id && <Modal onHandleClick={hideRatingModalHandler}><AddRating maxStars={10} setShowRatingModal={setShowRatingModal} movieId={movieResponse?.movie?.id} /></Modal>}
-    </article>;
+  return (
+    <article className="p-4 bg-white/10">
+      {content}
+      {showRatingModal && movieResponse?.movie.id && (
+        <Modal onHandleClick={hideRatingModalHandler}>
+          <AddRating
+            maxStars={10}
+            setShowRatingModal={setShowRatingModal}
+            movieId={movieResponse?.movie?.id}
+          />
+        </Modal>
+      )}
+    </article>
+  );
 };
 
 export default SingleMoviePage;
