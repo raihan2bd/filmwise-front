@@ -15,7 +15,7 @@ const AuthPage = () => {
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
   const isSignup = queryParams.get('signup')? true : false
-  const redirectUrl = queryParams.get("callback")
+  const redirectUrl = queryParams.get("callback")|| '/'
 
 
   const handleLogin = (email: string, password: string) => {
@@ -30,12 +30,14 @@ const AuthPage = () => {
   }
 
   useEffect(() => {
-    if(user?.id) {
-      
-      navigate(redirectUrl || '/', {replace: true})
-      return
+    // Check if the user is authenticated (user?.id is truthy)
+    if (user?.id) {
+      // Redirect to the specified URL
+      navigate(redirectUrl, { replace: true });
     }
-  }, [user])
+    // Ensure that this effect runs when 'user' changes
+  }, [user, redirectUrl]);
+  
 
 
   return (
