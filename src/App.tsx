@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAppSelector } from "./hooks/typeHooks";
 
 import Layout from "./components/Layout/Layout";
@@ -13,13 +13,17 @@ import AccessDeniedPage from "./pages/AccessDeniedPage";
 
 const App = () => {
   const user = useAppSelector((state) => state.auth.user);
+
+  const location = useLocation()
+  const queryParams = new URLSearchParams(location.search)
+  const redirectUrl = queryParams.get("callback")|| '/'
   return (
     <Layout>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route
           path="/auth"
-          element={!user ? <AuthPage /> : <Navigate to="/" />}
+          element={!user ? <AuthPage /> : <Navigate to={redirectUrl} />}
         />
         <Route path="/movies" element={<MoviesPage />} />
         <Route path="/movies/:id" element={<SingleMoviePage />} />
