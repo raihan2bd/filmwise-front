@@ -1,4 +1,4 @@
-import { useGetDramaMoviesQuery } from "../../redux/services/featureMoviesApi";
+import { useGetDramaMoviesQuery } from "../../redux/services/movieApi";
 import Spinner from "../UI/Spinner";
 
 import MoviesCarousel from "./MoviesCarousel";
@@ -17,9 +17,9 @@ const DramaMovies = () => {
     content = <Spinner />;
   } else if (isError) {
     let errorMessage;
-
-    if ("data" in error && error.data) {
-      errorMessage = error.data.error.message;
+    const err = error as CustomErrorType;
+    if (err.data.error.message) {
+      errorMessage = err.data.error.message;
     } else {
       errorMessage = "An unknown error occurred. Please try again.";
     }

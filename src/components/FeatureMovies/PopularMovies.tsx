@@ -1,32 +1,39 @@
-import {useGetPopularMoviesQuery} from '../../redux/services/featureMoviesApi'
-import Spinner from '../UI/Spinner';
+import { useGetPopularMoviesQuery } from "../../redux/services/movieApi";
+import Spinner from "../UI/Spinner";
 
-import MoviesCarousel from './MoviesCarousel';
+import MoviesCarousel from "./MoviesCarousel";
 
 const PopularMovies = () => {
-
-  const {isLoading, isSuccess, isError, data: featureMovies, error} = useGetPopularMoviesQuery()
+  const {
+    isLoading,
+    isSuccess,
+    isError,
+    data: featureMovies,
+    error,
+  } = useGetPopularMoviesQuery();
 
   let content;
-  if(isLoading) {
-    content = <Spinner />
-  } else if(isError) {
+  if (isLoading) {
+    content = <Spinner />;
+  } else if (isError) {
     let errorMessage;
-
-    if ('data' in error && error.data) {
-      errorMessage = error.data.error.message;
+    const err = error as CustomErrorType;
+    if (err.data.error.message) {
+      errorMessage = err.data.error.message;
     } else {
-      errorMessage = 'An unknown error occurred. Please try again.';
+      errorMessage = "An unknown error occurred. Please try again.";
     }
 
-    content = <p className="text-red-500 text-lg shadow">{errorMessage}</p>
-  } else if(isSuccess && featureMovies.movies) {
-    content = <MoviesCarousel movies={featureMovies.movies} />
+    content = <p className="text-red-500 text-lg shadow">{errorMessage}</p>;
+  } else if (isSuccess && featureMovies.movies) {
+    content = <MoviesCarousel movies={featureMovies.movies} />;
   }
 
   return (
-    <div className="min-h-[100px] flex flex-col justify-center items-center">{content}</div>
-  )
-}
+    <div className="min-h-[100px] flex flex-col justify-center items-center">
+      {content}
+    </div>
+  );
+};
 
 export default PopularMovies;

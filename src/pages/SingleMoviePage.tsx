@@ -1,7 +1,8 @@
 import { useMemo, useCallback, useState } from "react";
 import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
-import { useAppSelector } from "../hooks/typeHooks";
-import { useGetSingleMovieQuery } from "../redux/services/movieApi";
+import { useAppSelector, useAppDispatch } from "../hooks/typeHooks";
+import { useGetSingleMovieQuery, useManageFavoriteMutation } from "../redux/services/movieApi";
+import {logoutAction} from '../redux/features/authSlice'
 
 import Spinner from "../components/UI/Spinner";
 import Button from "../components/UI/Button";
@@ -13,9 +14,10 @@ import AddRating from "../components/Movies/AddRating";
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const SingleMoviePage = () => {
-  const [showRatingModal, setShowRatingModal] = useState(true)
+  const [showRatingModal, setShowRatingModal] = useState(false);
 
-
+  const [manageFavorite, {isLoading: isFavLoading}] = useManageFavoriteMutation()
+  const dispatch = useAppDispatch();
   const { id } = useParams();
   const user = useAppSelector((state) => state.auth.user);
   const { pathname, search } = useLocation();
@@ -29,18 +31,17 @@ const SingleMoviePage = () => {
     error,
   } = useGetSingleMovieQuery(Number(id));
 
-
   const hideRatingModalHandler = () => {
-    setShowRatingModal(false)
-  }
+    setShowRatingModal(false);
+  };
 
   const showRatingModalHandler = () => {
-    if (!user?.id) {
+    if (!user || !user.id) {
       navigate(`/auth?callback=${pathname}${search}`);
       return;
     }
-    setShowRatingModal(true)
-  }
+    setShowRatingModal(true);
+  };
 
   const deleteMovieHandler = (id: number) => {
     console.log(id);
@@ -50,22 +51,30 @@ const SingleMoviePage = () => {
     console.log(id);
   };
 
-  const handleAddFavorite = (id: number) => {
-    if (!user?.id) {
+  const handleAddFavorite = async (id: number) => {
+    if (!user) {
       navigate(`/auth?callback=${pathname}${search}`);
       return;
     }
-    console.log(id);
-  };
 
-  const handleAddRating = (rating: number) => {
-    if (!user?.id) {
-      navigate(`/auth?callback=${pathname}${search}`);
-      return;
+    try {
+      await manageFavorite({movie_id: id}).unwrap()
+    } catch (error) {
+      const err = error as CustomErrorType
+      let errMsg = 'something went wrong. please try again!'
+      if(err.status && err.status === 401) {
+        dispatch(logoutAction())
+      }
+
+      if(err.data.error.message) {
+        errMsg = err.data.error.message
+      }
+
+      // call the ui action later
+      console.log(errMsg)
     }
-    setShowRatingModal(false)
-    console.log(rating, movieResponse?.movie.id);
-  };
+    
+  }
 
   const handleAddComment = useCallback(
     (comTxt: string) => {
@@ -83,9 +92,9 @@ const SingleMoviePage = () => {
       return <Spinner />;
     } else if (isError) {
       let errorMessage;
-
-      if ("data" in error && error.data) {
-        errorMessage = error.data.error.message;
+      const err = error as CustomErrorType;
+      if (err.data.error.message) {
+        errorMessage = err.data.error.message;
       } else {
         errorMessage = "An unknown error occurred. Please try again.";
       }
@@ -126,10 +135,12 @@ const SingleMoviePage = () => {
               </h3>
 
               <p className="flex justify-between gap-2 bg-white/5 p-4">
-                <Button onClick={() => handleAddFavorite(movie.id)}>
-                  Add Favorite
+                <Button disabled={isFavLoading} btnClass={movie.is_favorite? 'bg-red-500': ''} onClick={() => handleAddFavorite(movie.id)}>
+                  {!movie.is_favorite? 'Add Favorite': 'Remove Favorite'}
                 </Button>
-                <Button onClick={showRatingModalHandler}>
+                <Button
+                  onClick={showRatingModalHandler}
+                >
                   Add Rating
                 </Button>
               </p>
@@ -211,12 +222,22 @@ const SingleMoviePage = () => {
         No Movie Found!
       </p>
     );
-  }, [isLoading, isError, error, isSuccess, movieResponse]);
+  }, [isLoading, isError, error, isSuccess, movieResponse, user]);
 
-  return <article className="p-4 bg-white/10">
-    {content}
-    {showRatingModal && movieResponse?.movie.id && <Modal onHandleClick={hideRatingModalHandler}><AddRating maxStars={10} setShowRatingModal={setShowRatingModal} movieId={movieResponse?.movie?.id} /></Modal>}
-    </article>;
+  return (
+    <article className="p-4 bg-white/10">
+      {content}
+      {showRatingModal && movieResponse?.movie.id && (
+        <Modal onHandleClick={hideRatingModalHandler}>
+          <AddRating
+            maxStars={10}
+            setShowRatingModal={setShowRatingModal}
+            movieId={movieResponse?.movie?.id}
+          />
+        </Modal>
+      )}
+    </article>
+  );
 };
 
 export default SingleMoviePage;

@@ -1,11 +1,12 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import FavoriteSVG from "../UI/FavoriteSVG";
 
 interface PropsType {
-  item: MovieType
+  item: MovieType;
 }
 
-const MovieItem = ({item}: PropsType) => {
-  const baseApiUrl = import.meta.env.VITE_API_BASE_URL
+const MovieItem = ({ item }: PropsType) => {
+  const baseApiUrl = import.meta.env.VITE_API_BASE_URL;
   return (
     <li
       className="item bg-white/10 m-2 flex flex-col gap-3 flex-grow max-w-[400px]"
@@ -30,16 +31,20 @@ const MovieItem = ({item}: PropsType) => {
         <span className="ms-auto text-sky-600 text-lg">&#10027;</span>
       </p>
       <div className="flex flex-row justify-between items-center text-sm bg-black/30 px-4 py-2">
-        <p className="">
-          <button className="text-2xl text-red-500 hover:bg-red-500 active:bg-red-500 px-2 py-0 hover:text-white active:text-white">
-            &#9825;
+        <p className="flex justify-center items-center">
+          <button className="text-2xl text-red-500 hover:bg-red-500 active:bg-red-500 p-2 hover:text-white active:text-white">
+            {item.is_favorite ? (
+              <FavoriteSVG isFavorite={true} />
+            ) : (
+              <FavoriteSVG isFavorite={false} />
+            )}
           </button>
           <span className="ps-2">{item.total_favorites}</span>
         </p>
         <p>Comment: {item.total_comments}</p>
       </div>
     </li>
-  )
-}
+  );
+};
 
-export default MovieItem
+export default MovieItem;

@@ -1,5 +1,5 @@
 import AliceCarousel from 'react-alice-carousel';
-import { useGetFeatureMoviesQuery } from '../../redux/services/featureMoviesApi';
+import { useGetFeatureMoviesQuery } from '../../redux/services/movieApi';
 
 import classes from './ImageSlider.module.css';
 import 'react-alice-carousel/lib/alice-carousel.css';
@@ -11,7 +11,7 @@ const ImageSlider = () => {
   if (isLoading) {
     content = <p>Loading...</p>
   } else if (isError) {
-   content =  <p>Something went wrong</p>
+   content =  <p>Something went wrong. Please try again.</p>
   } else if(isSuccess && featureMovies.movies) {
     const items = featureMovies.movies.map((movie) => (
       <div key={movie.id} className={classes.slider_item} data-value={movie.id}>
