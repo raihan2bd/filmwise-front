@@ -124,8 +124,8 @@ const SingleMoviePage = () => {
               </h3>
 
               <p className="flex justify-between gap-2 bg-white/5 p-4">
-                <Button onClick={() => handleAddFavorite(movie.id)}>
-                  Add Favorite
+                <Button btnClass={movie.is_favorite? 'bg-red-500': ''} onClick={() => handleAddFavorite(movie.id)}>
+                  {!movie.is_favorite? 'Add Favorite': 'Remove Favorite'}
                 </Button>
                 <Button
                   onClick={showRatingModalHandler}
