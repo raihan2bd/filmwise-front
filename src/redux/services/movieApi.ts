@@ -41,31 +41,69 @@ export const moviesApi = createApi({
   baseQuery: axiosBaseQuery({
     baseUrl: baseApiUrl,
   }),
-  tagTypes: ["Movies-API", "All-Movies", "Single-Movie"],
+  tagTypes: ["Movies-API", "All-Movies", "Single-Movie", "Feature-Movies", "Feature-Movies-Slide"],
   endpoints: (builder) => ({
+    getFeatureMovies: builder.query<MoviesResponse, void>({
+      query: () => ({url: '/movies/feature'}),
+      providesTags: ["Feature-Movies-Slide"],
+    }),
+
+    getPopularMovies: builder.query<MoviesResponse, void>({
+      query: () => ({url: '/movies?order_by=rating&limit=5'}),
+      providesTags: ["Feature-Movies"],
+    }),
+
+    getActionMovies: builder.query<MoviesResponse, void>({
+      query: () => ({url: '/movies?genre=3&limit=5'}),
+      providesTags: ["Feature-Movies"],
+    }),
+
+    getDramaMovies: builder.query<MoviesResponse, void>({
+      query: () => ({url: '/movies?genre=1&limit=5'}),
+      providesTags: ["Feature-Movies"],
+    }),
+
+    getMysteryMovies: builder.query<MoviesResponse, void>({
+      query: () => ({url: '/movies?genre=6&limit=5'}),
+      providesTags: ["Feature-Movies"],
+    }),
+
     getFilteredMovies: builder.query<MoviesResponse, string>({
       query: (url) => ({ url: `/${url}` }),
       providesTags: ["All-Movies"],
     }),
+
     getSingleMovie: builder.query<MovieResponse, number>({
       query: (id) => ({ url: `/movie/get_one/${id}` }),
       providesTags: ["Single-Movie"],
     }),
-    createRating: builder.mutation<
-      UpdateRatingResponse | CustomErrorType,
-      RatingInputType
->({
+
+    createRating: builder.mutation<UpdateRatingResponse | CustomErrorType, RatingInputType> ({
       query: (ratingInput) => ({
         url: "/rating/add",
         method: "POST",
         data: ratingInput,
       }),
-      invalidatesTags: ["Single-Movie", "All-Movies"],
+      invalidatesTags: ["Single-Movie", "All-Movies", "Feature-Movies"],
+    }),
+
+    manageFavorite: builder.mutation<UpdateRatingResponse | CustomErrorType, FavoriteInputType> ({
+      query: (favoriteInput) => ({
+        url: "/favorites/add_or_remove",
+        method: "POST",
+        data: favoriteInput,
+      }),
+      invalidatesTags: ["Single-Movie", "All-Movies", "Feature-Movies"],
     }),
   }),
 });
 
 export const {
+  useGetFeatureMoviesQuery,
+  useGetPopularMoviesQuery,
+  useGetActionMoviesQuery,
+  useGetDramaMoviesQuery,
+  useGetMysteryMoviesQuery,
   useGetFilteredMoviesQuery,
   useGetSingleMovieQuery,
   useCreateRatingMutation,

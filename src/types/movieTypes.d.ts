@@ -43,3 +43,7 @@ interface RatingInputType {
   rating: number;
   movie_id: number;
 }
+
+interface FavoriteInputType {
+  movie_id: number;
+}
