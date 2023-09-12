@@ -1,6 +1,7 @@
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
 import { Link } from "react-router-dom";
+import FavoriteSVG from "../UI/FavoriteSVG";
 
 import './MoviesCarousel.css'
 
@@ -45,8 +46,12 @@ const MoviesCarousel = ({ movies }: PropsType) => {
         </p>
         <div className="flex flex-row justify-between items-center text-sm bg-black/30 px-4 py-2">
           <p className="">
-            <button className="text-2xl text-red-500 hover:bg-red-500 active:bg-red-500 px-2 py-0 hover:text-white active:text-white">
-              &#9825;
+            <button className="text-2xl text-red-500 hover:bg-red-500 active:bg-red-500 p-2 hover:text-white active:text-white">
+            {item.is_favorite ? (
+              <FavoriteSVG isFavorite={true} />
+            ) : (
+              <FavoriteSVG isFavorite={false} />
+            )}
             </button>
             <span className="ps-2">{item.total_favorites}</span>
           </p>
