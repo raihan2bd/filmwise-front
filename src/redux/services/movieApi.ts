@@ -107,4 +107,5 @@ export const {
   useGetFilteredMoviesQuery,
   useGetSingleMovieQuery,
   useCreateRatingMutation,
+  useManageFavoriteMutation,
 } = moviesApi;
