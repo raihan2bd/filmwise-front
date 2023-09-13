@@ -47,3 +47,9 @@ interface RatingInputType {
 interface FavoriteInputType {
   movie_id: number;
 }
+
+interface CommentInputType {
+  movie_id: number;
+  comment: string;
+  comment_id?: string;
+}
