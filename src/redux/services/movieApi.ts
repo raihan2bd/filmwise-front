@@ -87,11 +87,10 @@ export const moviesApi = createApi({
       invalidatesTags: ["Single-Movie", "All-Movies", "Feature-Movies"],
     }),
 
-    manageFavorite: builder.mutation<UpdateRatingResponse | CustomErrorType, FavoriteInputType> ({
-      query: (favoriteInput) => ({
-        url: "/favorites/add_or_remove",
-        method: "POST",
-        data: favoriteInput,
+    manageFavorite: builder.mutation<UpdateRatingResponse | CustomErrorType, number> ({
+      query: (movieId) => ({
+        url: `/favorite/${movieId}`,
+        method: "GET",
       }),
       invalidatesTags: ["Single-Movie", "All-Movies", "Feature-Movies"],
     }),

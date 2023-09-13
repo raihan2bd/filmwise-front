@@ -28,7 +28,7 @@ const MovieCarouselItem = ({item}: MovieCarouselItemProps) => {
     }
 
     try {
-      await manageFavorite({movie_id: id}).unwrap()
+      await manageFavorite(id).unwrap()
     } catch (error) {
       const err = error as CustomErrorType
       let errMsg = 'something went wrong. please try again!'
@@ -45,7 +45,6 @@ const MovieCarouselItem = ({item}: MovieCarouselItemProps) => {
     }
     
   }
-
 
   return (
     <div
