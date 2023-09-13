@@ -1,16 +1,32 @@
 import { useState, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from "../../hooks/typeHooks";
 import Button from "../UI/Button";
+import { logoutAction } from "../../redux/features/authSlice";
+import { useAddMovieCommentMutation } from "../../redux/services/movieApi";
 
 type PropsType = {
-  submitHandler: (comTxt: string) => void
+  movieId: number
 }
 
-const AddCommentForm = ({submitHandler}: PropsType) => {
+const AddCommentForm = ({movieId}: PropsType) => {
   const commentText = useRef<HTMLTextAreaElement | null>(null);
   const [isFormError, setIsFormError] = useState<Boolean>(false);
+  
+  const user = useAppSelector((state) => state.auth.user)
+  const dispatch = useAppDispatch();
+  const { pathname, search } = useLocation();
+  const navigate = useNavigate();
 
-  const handleCommentSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [addMovieComment, {isLoading: isCommentLoading}] = useAddMovieCommentMutation()
+
+  const handleCommentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!user?.id) {
+      navigate(`/auth?callback=${pathname}${search}`);
+      return;
+    }
+
     const value = commentText?.current?.value;
     if (!value) {
       commentText.current?.focus();
@@ -23,7 +39,22 @@ const AddCommentForm = ({submitHandler}: PropsType) => {
       return;
     }
 
-    submitHandler(value)
+    try {
+      const response = await addMovieComment({movie_id: movieId, comment: value}).unwrap()
+      console.log(response)
+
+    } catch (error) {
+      const err = error as CustomErrorType
+      console.log(err)
+      let errMsg = 'something went wrong. please try again.'
+      if(err.status && err.status === 401) {
+        dispatch(logoutAction())
+      }
+      if(err.data.error.message) {
+        errMsg = err.data.error.message
+      }
+      console.log(errMsg)
+    }
   };
 
   return (
@@ -50,7 +81,7 @@ const AddCommentForm = ({submitHandler}: PropsType) => {
           ref={commentText}
         ></textarea>
       </div>
-      <Button btnClass="text-base py-3" type="submit">
+      <Button disabled={isCommentLoading} btnClass="text-base py-3" type="submit">
         Submit
       </Button>
     </form>

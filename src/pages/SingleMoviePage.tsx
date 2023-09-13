@@ -76,16 +76,16 @@ const SingleMoviePage = () => {
     
   }
 
-  const handleAddComment = useCallback(
-    (comTxt: string) => {
-      if (!user?.id) {
-        navigate(`/auth?callback=${pathname}${search}`);
-        return;
-      }
-      console.log(comTxt);
-    },
-    [pathname, search]
-  );
+  // const handleAddComment = useCallback(
+  //   (comTxt: string) => {
+  //     if (!user?.id) {
+  //       navigate(`/auth?callback=${pathname}${search}`);
+  //       return;
+  //     }
+  //     console.log(comTxt);
+  //   },
+  //   [pathname, search]
+  // );
 
   const content = useMemo(() => {
     if (isLoading) {
@@ -182,7 +182,7 @@ const SingleMoviePage = () => {
           </p>
           <div className="flex flex-col gap-6 justify-center mt-6 md:flex-row">
             <div className="flex-1">
-              <AddCommentForm submitHandler={handleAddComment} />
+              <AddCommentForm movieId={movie.id} />
             </div>
 
             <div className="flex-1 bg-white/5 p-4 md:h-[400px] overflow-y-scroll">

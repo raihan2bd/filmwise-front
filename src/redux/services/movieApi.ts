@@ -94,6 +94,15 @@ export const moviesApi = createApi({
       }),
       invalidatesTags: ["Single-Movie", "All-Movies", "Feature-Movies"],
     }),
+
+    addMovieComment: builder.mutation<UpdateRatingResponse | CustomErrorType, CommentInputType> ({
+      query: (commentInput) => ({
+        url: `/movie/comments/add`,
+        method: "POST",
+        data: commentInput,
+      }),
+      invalidatesTags: ["Single-Movie", "All-Movies"],
+    }),
   }),
 });
 
@@ -107,4 +116,5 @@ export const {
   useGetSingleMovieQuery,
   useCreateRatingMutation,
   useManageFavoriteMutation,
+  useAddMovieCommentMutation,
 } = moviesApi;
