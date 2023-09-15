@@ -206,6 +206,10 @@ a:active, button:active {
   color: var(--color-light-blue);
 }
 
+.background_gradient {
+  background: radial-gradient(circle at 10% 20%, rgb(0, 0, 0) 0%, rgb(64, 64, 64) 90.2%);
+}
+
 @media (max-width: 767px) {
   .d-flex-sm-row {
     display: flex;
