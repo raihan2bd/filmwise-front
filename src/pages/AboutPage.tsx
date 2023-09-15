@@ -20,16 +20,16 @@ const AboutPage = () => {
       linkdin: "https://www.linkedin.com/in/hassaan-jawwad-baig/",
     }
   ]
- return <section className="w-full">
+ return <section className="w-full md:h-screen  background_gradient">
     <div className="flex w-full flex-col justify-center items-center my-2">
     <h2 className="font-semibold text-7xl my-6 ">About</h2>
     <p className="container text-xl font-sans">{About}</p>
     </div>
     <div>
       <h2 className="font-semibold text-7xl my-6 text-center">Team</h2>
-      <ul className="flex max-md:flex-col md:justify-between justify-center items-center gap-2 w-full my-4">
+      <ul className="flex max-md:flex-col md:justify-around justify-center items-center gap-2 w-full my-4">
         {Team.map((member) => (
-          <li key={member.id} className="flex justify-center items-center md:mx-4 gap-3">
+          <li key={member.id} className="flex justify-center items-center md:mx-4 border border-gray-500 p-5 rounded-lg gap-3 text-lg my-3">
           <div>
              <img className="w-40 h-40 rounded-md" src={member.image} alt={member.name} />
           </div>
@@ -43,8 +43,6 @@ const AboutPage = () => {
           </li>
         ))}
       </ul>
-        <div className="">
-          </div>
     </div>
   </section>;
 };
