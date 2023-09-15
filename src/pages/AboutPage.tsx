@@ -35,7 +35,7 @@ const AboutPage = () => {
           </div>
           <div>
               <h3 className="font-semibold text-2xl">{member.name}</h3>
-              <p className="font-semibold text-xl">{member.role}</p>
+              <p className="font-semibold text-sm text-gray-400 my-1">{member.role}</p>
               <p className="font-semibold text-xl"><span className="font-semibold mr-3">Github:</span> <a href={member.github} target="_blank" className="text-gray-400 text-lg">Click me</a></p>
               <p className="font-semibold text-xl "><span className="font-semibold mr-3">Linkdin:</span><a href={member.linkdin} className="text-gray-400 text-lg" target="_blank">Click me</a></p>
               {member.Twitter && <p className="font-semibold text-xl">Twitter: <a href={member.Twitter} className="text-gray-400 ml-2 text-lg" target="_blank">Click me</a></p>}
