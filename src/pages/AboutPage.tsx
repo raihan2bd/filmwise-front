@@ -20,25 +20,25 @@ const AboutPage = () => {
       linkdin: "https://www.linkedin.com/in/hassaan-jawwad-baig/",
     }
   ]
- return <section className="w-full md:h-screen  background_gradient">
+ return <section className="w-full md:h-screen background_gradient">
     <div className="flex w-full flex-col justify-center items-center my-2">
     <h2 className="font-semibold text-7xl my-6 ">About</h2>
-    <p className="container text-xl font-sans">{About}</p>
+    <p className="container text-xl font-sans max-sm:px-9">{About}</p>
     </div>
     <div>
       <h2 className="font-semibold text-7xl my-6 text-center">Team</h2>
-      <ul className="flex max-md:flex-col md:justify-around justify-center items-center gap-2 w-full my-4">
+      <ul className="flex max-md:flex-col md:justify-around justify-center items-center gap-2 w-full my-6">
         {Team.map((member) => (
-          <li key={member.id} className="flex justify-center items-center md:mx-4 border border-gray-500 p-5 rounded-lg gap-3 text-lg my-3">
+          <li key={member.id} className="flex justify-center items-center md:mx-4 border border-gray-500 md:p-5 p-2 mx-2 rounded-lg sm:gap-3 gap-1 text-lg my-2">
           <div>
              <img className="w-40 h-40 rounded-md" src={member.image} alt={member.name} />
           </div>
           <div>
-              <h3 className="font-semibold text-2xl">{member.name}</h3>
-              <p className="font-semibold text-sm text-gray-400 my-1">{member.role}</p>
-              <p className="font-semibold text-xl"><span className="font-semibold mr-3">Github:</span> <a href={member.github} target="_blank" className="text-gray-400 text-lg">Click me</a></p>
-              <p className="font-semibold text-xl "><span className="font-semibold mr-3">Linkdin:</span><a href={member.linkdin} className="text-gray-400 text-lg" target="_blank">Click me</a></p>
-              {member.Twitter && <p className="font-semibold text-xl">Twitter: <a href={member.Twitter} className="text-gray-400 ml-2 text-lg" target="_blank">Click me</a></p>}
+              <h3 className="font-semibold md:text-2xl text-lg">{member.name}</h3>
+              <p className="font-semibold text-sm text-gray-400 md:my-1">{member.role}</p>
+              <p className="font-semibold md:text-xl"><span className="font-semibold md:mr-3 max-sm:text-base">Github:</span> <a href={member.github} target="_blank" className="text-gray-400 md:text-base text-sm">Click me</a></p>
+              <p className="font-semibold md:text-xl "><span className="font-semibold md:mr-3 max-sm:text-base">Linkdin:</span><a href={member.linkdin} className="text-gray-400 md:text-base text-sm" target="_blank">Click me</a></p>
+              {member.Twitter && <p className="font-semibold md:text-xl max-sm:text-base">Twitter: <a href={member.Twitter} className="text-gray-400 ml-2 md:text-base text-sm" target="_blank">Click me</a></p>}
           </div>
           </li>
         ))}
