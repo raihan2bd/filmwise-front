@@ -129,4 +129,46 @@ export const validateFullName = (fullName: string, minLength: number = 5, maxLen
   };
 };
 
+export const validateYear = (year: string): EmailValidationResult => {
+  // Regular expression pattern for a valid year (four digits)
+  const yearPattern = /^\d{4}$/;
+
+  if (!yearPattern.test(year)) {
+    return {
+      isValid: false,
+      errorMsg: 'Invalid year format. Please enter a valid four-digit year.',
+    };
+  }
+
+  return {
+    isValid: true,
+  };
+};
+
+interface TitleValidationResult {
+  isValid: boolean;
+  errorMsg?: string;
+}
+
+export const validateTitle = (title: string, minLength: number = 3, maxLength: number = 255): TitleValidationResult => {
+  if (title.length < minLength) {
+    return {
+      isValid: false,
+      errorMsg: `Title must be at least ${minLength} characters long.`,
+    };
+  }
+
+  if (title.length > maxLength) {
+    return {
+      isValid: false,
+      errorMsg: `Title cannot exceed ${maxLength} characters.`,
+    };
+  }
+
+  return {
+    isValid: true,
+  };
+};
+
+
 
