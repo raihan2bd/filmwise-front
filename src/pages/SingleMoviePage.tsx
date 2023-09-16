@@ -109,7 +109,7 @@ const SingleMoviePage = () => {
               <img
                 className="max-w-[100%] h-auto"
                 src={`${baseUrl}${movie.image}`}
-                alt="djfkdfkd"
+                alt={movie.title}
               />
             </div>
             <div className="flex flex-col gap-4 w-full md:w-[33%] flex-grow">
