@@ -170,5 +170,51 @@ export const validateTitle = (title: string, minLength: number = 3, maxLength: n
   };
 };
 
+export const validateMovieYear = (year: number, maxYear:number = 2050, minYear:number = 1900): TitleValidationResult => {
+  if (year.toString.length > 4) {
+    return {
+      isValid: false,
+      errorMsg: `Year must be a four-digit number.`,
+    }
+  }
+    if (year > maxYear) {
+      return {
+        isValid: false,
+        errorMsg: `Year cannot exceed ${maxYear}.`,
+      };
+    }
+
+    if (year < minYear) {
+      return {
+        isValid: false,
+        errorMsg: `Year cannot be less than ${minYear}.`,
+      }
+    }
+
+    return { 
+      isValid: true,
+     }
+    
+  }
+
+  export const validateRuntime = (runtime: number, maxRuntime:number = 400, minRuntime:number = 50): TitleValidationResult => {
+    if (runtime > maxRuntime) {
+      return {
+        isValid: false,
+        errorMsg: `Runtime cannot exceed ${maxRuntime}.`,
+      };
+    }
+
+    if (runtime < minRuntime) {
+      return {
+        isValid: false,
+        errorMsg: `Runtime cannot be less than ${minRuntime}.`,
+      }
+    }
+
+    return { 
+      isValid: true,
+     }
+  }
 
 

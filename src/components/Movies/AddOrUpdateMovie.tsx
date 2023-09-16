@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Input from '../UI/Input';
 import Button from '../UI/Button';
 import useInput from '../../hooks/useInput';
-import { validateTitle } from '../../utils/validator';
+import { validateTitle, validateMovieYear, validateRuntime  } from '../../utils/validator';
 import { useAddNewMovieMutation } from '../../redux/services/movieApi';
 
 interface PropsType {
@@ -21,6 +21,16 @@ const AddOrUpdateMovie = ({movieId}: PropsType) => {
     return isTitle.isValid ? null : isTitle.errorMsg || 'Invalid Title!';
   };
 
+  const validateYear = (value: string | null) => {
+    const isYear = validateMovieYear(parseInt(value!));
+    return isYear.isValid ? null : isYear.errorMsg || 'Invalid Year!';
+  }
+
+  const validateRuntimeInput = (value: string | null) => {
+    const isRuntime = validateRuntime(parseInt(value!));
+    return isRuntime.isValid ? null : isRuntime.errorMsg || 'Invalid Runtime!';
+  }
+
   const {
     value: title,
     errorMsg: titleError,
@@ -29,22 +39,39 @@ const AddOrUpdateMovie = ({movieId}: PropsType) => {
     inputBlurHandler: titleBlurHandler,
   } = useInput(validateTitleInput);
 
+  const {
+    value: description,
+    errorMsg: descriptionError,
+    isTouched: isDescriptionTouched,
+    valueChangeHandler: descriptionChangeHandler,
+    inputBlurHandler: descriptionBlurHandler,
+  } = useInput(validateTitleInput);
+
+  const {
+    value: year,
+    errorMsg: yearError,
+    isTouched: isYearTouched,
+    valueChangeHandler: yearChangeHandler,
+    inputBlurHandler: yearBlurHandler,
+  } = useInput(validateYear)
+
+  const {
+    value: runtime,
+    errorMsg: runtimeError,
+    isTouched: isRuntimeTouched,
+    valueChangeHandler: runtimeChangeHandler,
+    inputBlurHandler: runtimeBlurHandler,
+  } = useInput(validateRuntimeInput)
+
   let formIsValid = false
 
-  if(!titleError) {
+  if(!titleError && !descriptionError) {
     formIsValid = true
   }
   // if(!titleError && !passwordError) {
   //   formIsValid = true
   // }
 
-
-
-
-  // const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   // const value = e.target.value
-  //   setTitle(e.target.value)
-  // }
 
   const handleOnSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,6 +117,22 @@ const AddOrUpdateMovie = ({movieId}: PropsType) => {
     <form className="w-[800px] max-w-[100%] p-4 bg-white/10" onSubmit={handleOnSubmit}>
       <h3 className="text-2xl text-center my-2 font-bold">{movieId? "Update Movie" : "New Movie"}</h3>
       <Input name="title" label='Title' placeholder="Enter the movie title here" type="text" onChange={titleChangeHandler} inputError={istitleTouched? titleError : null} value={title} onBlur={titleBlurHandler} />
+      <Input name='Description' label="Description" placeholder="Enter the movie description here" type='text' value={description} onChange={descriptionChangeHandler} inputError={isDescriptionTouched? descriptionError : null} onBlur={descriptionBlurHandler} />
+      {/* <input type='number' /> */}
+      {/* <Input type='number' label='Year' name='Year' /> */}
+      <Input
+         name='Year'
+         label="Year"
+         placeholder="Enter Year of movie release (e.g., 2023)"
+         type='number'
+         value={year}
+         pattern='[1950-2023]'
+         inputError={isYearTouched ? yearError : null}
+         onBlur={yearBlurHandler}
+          onChange={yearChangeHandler}
+         />
+      <Input name='Runtime' label="Runtime" placeholder="Enter the movie runtime here" type='number' value={runtime} onChange={runtimeChangeHandler} inputError={isRuntimeTouched? runtimeError : null} onBlur={runtimeBlurHandler} />
+
       <Button disabled={!formIsValid || loadingNewMovie} btnClass="my-3 block ms-auto" type='submit'>Submit</Button>
     </form>
   )
