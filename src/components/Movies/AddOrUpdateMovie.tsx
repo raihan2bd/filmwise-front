@@ -4,6 +4,7 @@ import Button from '../UI/Button';
 import useInput from '../../hooks/useInput';
 import { validateTitle, validateMovieYear, validateRuntime  } from '../../utils/validator';
 import { useAddNewMovieMutation } from '../../redux/services/movieApi';
+import { useGetAllGenresQuery } from '../../redux/services/genresApi';
 
 interface PropsType {
   movieId: number | null;
@@ -11,10 +12,12 @@ interface PropsType {
 
 const AddOrUpdateMovie = ({movieId}: PropsType) => {
   const [movieForm, setMovieForm] = useState({})
+  // const [Genres, setGenres] = useState(second)
   // const [title, setTitle] = useState('')
 
   const [addNewMovie, {isLoading: loadingNewMovie}] = useAddNewMovieMutation()
-  const [ReleaseDate, setReleaseDate] = useState("")
+  const {data: genres } = useGetAllGenresQuery()
+const [ReleaseDate, setReleaseDate] = useState("")
 
 
   const validateTitleInput = (value: string) => {
@@ -114,7 +117,7 @@ const AddOrUpdateMovie = ({movieId}: PropsType) => {
 
 
 
-  useEffect(() => {
+  useEffect( () => {
     if(movieId) {
       // call the back-end and update the form
       setMovieForm(prevState => {
@@ -149,6 +152,18 @@ const AddOrUpdateMovie = ({movieId}: PropsType) => {
           type="date"
           onChange={handleDateChange}
         />
+        <label>Genres</label>
+        <select
+         name="Genres"
+         id="Genres"
+         className="bg-white/10 w-[100%] flex-grow flex-shrink p-2 text-white/50 rounded my-5 ">
+          <option value="" >Select Genres</option>
+        {genres?.genres.map((genre) => (
+          <option key={genre.id} value={genre.id}>
+           {genre.genre_name}
+          </option>
+        ))}
+        </select>
       
 
       <Button disabled={!formIsValid || loadingNewMovie} btnClass="my-3 block ms-auto" type='submit'>Submit</Button>
