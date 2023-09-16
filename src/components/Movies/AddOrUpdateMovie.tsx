@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import Input from '../UI/Input';
 import Button from '../UI/Button';
 import useInput from '../../hooks/useInput';
@@ -12,12 +13,13 @@ interface PropsType {
 
 const AddOrUpdateMovie = ({movieId}: PropsType) => {
   const [movieForm, setMovieForm] = useState({})
-  // const [Genres, setGenres] = useState(second)
-  // const [title, setTitle] = useState('')
+  const [movieGenres, setMovieGenres] = useState({})
 
   const [addNewMovie, {isLoading: loadingNewMovie}] = useAddNewMovieMutation()
   const {data: genres } = useGetAllGenresQuery()
 const [ReleaseDate, setReleaseDate] = useState("")
+
+const navigate = useNavigate()
 
 
   const validateTitleInput = (value: string) => {
@@ -75,6 +77,30 @@ const [ReleaseDate, setReleaseDate] = useState("")
   // if(!titleError && !passwordError) {
   //   formIsValid = true
   // }
+
+  // const handleGenreChange = (id: number, value: string) => {
+  //   setMovieGenres((prev) => {
+  //     return {
+  //       ...prev,
+  //       id: value,
+  //     }
+  //   })
+  // }
+  const handleGenreChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+   const value = e.target.value
+   if (!Number(value)) return
+
+    const genre = genres?.genres?.find(item => item.id === Number(value))
+    if(genre) {
+      setMovieGenres((prev) => {
+        return {
+          ...prev,
+          [value]: genre.genre_name,
+        }
+      })
+    }
+  }
+
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // console.log(e.target.value)
     const date = new Date (e.target.value)
@@ -97,17 +123,16 @@ const [ReleaseDate, setReleaseDate] = useState("")
       description: description,
       runtime: runtime,
       release_date: ReleaseDate,
-      genres: {
-        "3": "Action",
-        "5": "Sci-Fi"
-      },
+      genres: movieGenres,
       image_id: "1",
-      year: ReleaseDate
+      year: year,
     }
 
     try {
       const response = await addNewMovie(newMovie).unwrap()
-      console.log(response)
+      if('id' in response) {
+        navigate(`/movies/${response.id}`)
+      }
     } catch (err) {
       const error = err as CustomErrorType
       console.log(error)
@@ -156,6 +181,7 @@ const [ReleaseDate, setReleaseDate] = useState("")
         <select
          name="Genres"
          id="Genres"
+         onChange={handleGenreChange}
          className="bg-white/10 w-[100%] flex-grow flex-shrink p-2 text-white/50 rounded my-5 ">
           <option value="" >Select Genres</option>
         {genres?.genres.map((genre) => (
