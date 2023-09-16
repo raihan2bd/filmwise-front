@@ -14,6 +14,7 @@ const AddOrUpdateMovie = ({movieId}: PropsType) => {
   // const [title, setTitle] = useState('')
 
   const [addNewMovie, {isLoading: loadingNewMovie}] = useAddNewMovieMutation()
+  const [ReleaseDate, setReleaseDate] = useState("")
 
 
   const validateTitleInput = (value: string) => {
@@ -71,6 +72,14 @@ const AddOrUpdateMovie = ({movieId}: PropsType) => {
   // if(!titleError && !passwordError) {
   //   formIsValid = true
   // }
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // console.log(e.target.value)
+    const date = new Date (e.target.value)
+    const month = (date.getMonth() + 1).toString().padStart(2, '0')
+    const day = date.getDate().toString().padStart(2, '0')
+    const formattedDate = `${date.getFullYear()}-${month}-${day}`
+    setReleaseDate(formattedDate.toString())
+  }
 
 
   const handleOnSubmit = async (e: React.FormEvent) => {
@@ -79,17 +88,18 @@ const AddOrUpdateMovie = ({movieId}: PropsType) => {
       return
     }
 
+
     const newMovie: MovieInputType = {
       title: title,
-      description: "lorem ipsumfkdfdkkdfd",
-      runtime: "152",
-      release_date: "2023-09-07",
+      description: description,
+      runtime: runtime,
+      release_date: ReleaseDate,
       genres: {
         "3": "Action",
         "5": "Sci-Fi"
       },
       image_id: "1",
-      year: "2023"
+      year: ReleaseDate
     }
 
     try {
@@ -130,8 +140,16 @@ const AddOrUpdateMovie = ({movieId}: PropsType) => {
          inputError={isYearTouched ? yearError : null}
          onBlur={yearBlurHandler}
           onChange={yearChangeHandler}
-         />
-      <Input name='Runtime' label="Runtime" placeholder="Enter the movie runtime here" type='number' value={runtime} onChange={runtimeChangeHandler} inputError={isRuntimeTouched? runtimeError : null} onBlur={runtimeBlurHandler} />
+       />
+        <Input name='Runtime' label="Runtime" placeholder="Enter the movie runtime here" type='number' value={runtime} onChange={runtimeChangeHandler} inputError={isRuntimeTouched? runtimeError : null} onBlur={runtimeBlurHandler} />
+       <Input 
+          name="Release Date"
+          label="Release Date"
+          placeholder="Enter the movie release date here"
+          type="date"
+          onChange={handleDateChange}
+        />
+      
 
       <Button disabled={!formIsValid || loadingNewMovie} btnClass="my-3 block ms-auto" type='submit'>Submit</Button>
     </form>
