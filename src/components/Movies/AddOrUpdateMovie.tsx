@@ -21,8 +21,12 @@ interface PropsType {
   movieId: number | null;
 }
 
+type MyMovieGenres = {
+  [key: string]: string;
+};
+
 const AddOrUpdateMovie = ({ movieId }: PropsType) => {
-  const [movieGenres, setMovieGenres] = useState({});
+  const [movieGenres, setMovieGenres] = useState<MyMovieGenres>({});
   const [imageId, setImageId] = useState<null | number>();
 
   const [addNewMovie, { isLoading: loadingNewMovie }] =
@@ -174,6 +178,14 @@ const AddOrUpdateMovie = ({ movieId }: PropsType) => {
     }
   };
 
+  let genresContent;
+  const genresArr = Object.keys(movieGenres)
+  if(genresArr.length> 0) {
+    genresContent = genresArr.map((item) => {
+      return (<span key={item} className="bg-black rounded p-2">{movieGenres[item]}</span>)
+    })
+  }
+
   return (
     <form
       className="w-[800px] max-w-[100%] p-4 bg-white/10"
@@ -263,12 +275,14 @@ const AddOrUpdateMovie = ({ movieId }: PropsType) => {
         type="date"
         onChange={handleDateChange}
       />
+      
       <label>Genres</label>
+      <p className="bg-white/10 my-2 text-sm p-2 rounded-sm flex gap-1 flex-wrap">{genresContent}</p>
       <select
         name="Genres"
         id="Genres"
         onChange={handleGenreChange}
-        className="bg-white/10 w-[100%] flex-grow flex-shrink p-2 text-white/50 rounded mt-3 my-2"
+        className="bg-white/50 w-[100%] flex-grow flex-shrink p-2 text-black rounded mt-3 my-2"
       >
         <option value="">Select Genres</option>
         {genres?.genres.map((genre) => (
