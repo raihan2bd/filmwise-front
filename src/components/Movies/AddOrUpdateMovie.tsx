@@ -120,12 +120,6 @@ const navigate = useNavigate()
     setReleaseDate(formattedDate.toString())
   }
 
-  const handleFileChange = (e :ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files![0]
-    setMoviePhotos(file)
-    // console.log(file)
-  }
-
   const handleOnSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if(!formIsValid) {
@@ -206,7 +200,7 @@ const navigate = useNavigate()
         ))}
         </select>
         {/* <input type="file" name="Photo" id="Photos" /> */}
-        <Input type="file" name="Photos" id="Photos" onChange={imageChangeHandler} inputError={isImageTouched ? imageError : null} onBlur={imageBlurHandler} />
+        <Input type="file" label='Image' name="Photos" id="Photos" onChange={imageChangeHandler} inputError={isImageTouched ? imageError : null} onBlur={imageBlurHandler} />
         {imageError && <p className="text-red-500 text-sm">{imageError}</p>}
       <Button disabled={!formIsValid || loadingNewMovie} btnClass="my-3 block ms-auto" type='submit'>Submit</Button>
     </form>

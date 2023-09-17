@@ -218,7 +218,7 @@ export const validateMovieYear = (year: number, maxYear:number = 2050, minYear:n
   }
 
 
-  export const validateImage = (image: File | null): string | boolean => {
+  export const validateImage = (image: File): string | boolean | null => {
     console.log(image);
     if (image == undefined) {
       return 'Please upload an image.';
