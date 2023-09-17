@@ -10,11 +10,13 @@ import AddCommentForm from "../components/Movies/AddCommentForm";
 import { formatDateDefault } from "../utils/utils";
 import Modal from "../components/UI/Modal";
 import AddRating from "../components/Movies/AddRating";
+import DeleteMovie from "../components/Movies/DeleteMovie";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const SingleMoviePage = () => {
   const [showRatingModal, setShowRatingModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const [manageFavorite, {isLoading: isFavLoading}] = useManageFavoriteMutation()
   const dispatch = useAppDispatch();
@@ -31,6 +33,14 @@ const SingleMoviePage = () => {
     error,
   } = useGetSingleMovieQuery(Number(id));
 
+  const showDeleteModelHandler = () => {
+    setShowDeleteModal(true)
+  }
+
+  const hideDeleteModelHandler = () => {
+    setShowDeleteModal(false)
+  }
+
   const hideRatingModalHandler = () => {
     setShowRatingModal(false);
   };
@@ -41,10 +51,6 @@ const SingleMoviePage = () => {
       return;
     }
     setShowRatingModal(true);
-  };
-
-  const deleteMovieHandler = (id: number) => {
-    console.log(id);
   };
 
   const editMovieHandler = (id: number) => {
@@ -117,7 +123,7 @@ const SingleMoviePage = () => {
                 <p className="flex justify-between gap-2 bg-white/5 p-4">
                   <Button
                     btnClass="bg-red-500"
-                    onClick={() => deleteMovieHandler(movie.id)}
+                    onClick={showDeleteModelHandler}
                   >
                     Delete
                   </Button>
@@ -234,6 +240,11 @@ const SingleMoviePage = () => {
             setShowRatingModal={setShowRatingModal}
             movieId={movieResponse?.movie?.id}
           />
+        </Modal>
+      )}
+      {showDeleteModal && movieResponse?.movie.id && (
+        <Modal onHandleClick={hideRatingModalHandler}>
+          <DeleteMovie movieId={movieResponse?.movie?.id} setShowRatingModal={setShowDeleteModal} />
         </Modal>
       )}
     </article>

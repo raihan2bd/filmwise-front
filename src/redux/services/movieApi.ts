@@ -112,6 +112,14 @@ export const moviesApi = createApi({
       }),
       invalidatesTags: ["Single-Movie", "All-Movies"],
     }),
+
+    deleteAMovie: builder.mutation<MovieInsertResponseType | CustomErrorType, number> ({
+      query: (movieId) => ({
+        url: `/admin/movie/delete/${movieId}`,
+        method: "GET",
+      }),
+      invalidatesTags: ["Movies-API", "All-Movies", "Single-Movie", "Feature-Movies", "Feature-Movies-Slide"],
+    }),
   }),
 });
 
@@ -127,4 +135,5 @@ export const {
   useManageFavoriteMutation,
   useAddMovieCommentMutation,
   useAddNewMovieMutation,
+  useDeleteAMovieMutation,
 } = moviesApi;
