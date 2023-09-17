@@ -97,6 +97,7 @@ const MoviesPage = () => {
   
     // Update the URL with the new query parameters
     navigate(`?${newQueryParams.toString()}`);
+    setShowFiltered(false)
   };
   
 

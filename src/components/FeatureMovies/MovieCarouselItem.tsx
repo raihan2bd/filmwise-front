@@ -51,9 +51,9 @@ const MovieCarouselItem = ({item}: MovieCarouselItemProps) => {
         className="item bg-white/10 m-2 flex flex-col gap-3"
         data-value={item.id}
       >
-        <div className="overflow-hidden max-w-[100%]">
+        <div className="overflow-hidden max-w-[100%] h-80">
           <img
-            className="max-h-[400px] w-full"
+            className="h-full w-full"
             src={`${baseApiUrl}${item.image}`}
             alt={item.title}
           />

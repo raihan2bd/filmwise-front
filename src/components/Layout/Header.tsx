@@ -117,7 +117,7 @@ const Header = () => {
             placeholder="Search movies..."
             ref={searchInputRef}
           />
-          <button type="submit" className="btn-search-toggle">
+          <button type="submit" className="btn-search-toggle bg-white/10">
             <FiSearch />
           </button>
         </form>
