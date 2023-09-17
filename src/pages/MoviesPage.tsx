@@ -105,9 +105,10 @@ const MoviesPage = () => {
       return <Spinner />;
     } else if (isError) {
       let errorMessage;
+      const err = error as any
 
-      if ("data" in error && error.data) {
-        errorMessage = error.data.error.message;
+      if ("data" in err && err.data) {
+        errorMessage = err.data.err.message;
       } else {
         errorMessage = "An unknown error occurred. Please try again.";
       }
