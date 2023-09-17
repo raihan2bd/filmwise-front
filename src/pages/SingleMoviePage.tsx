@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useState } from "react";
+import { useMemo, useState } from "react";
 import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../hooks/typeHooks";
 import { useGetSingleMovieQuery, useManageFavoriteMutation } from "../redux/services/movieApi";
@@ -243,7 +243,7 @@ const SingleMoviePage = () => {
         </Modal>
       )}
       {showDeleteModal && movieResponse?.movie.id && (
-        <Modal onHandleClick={hideRatingModalHandler}>
+        <Modal onHandleClick={hideDeleteModelHandler}>
           <DeleteMovie movieId={movieResponse?.movie?.id} setShowRatingModal={setShowDeleteModal} />
         </Modal>
       )}
