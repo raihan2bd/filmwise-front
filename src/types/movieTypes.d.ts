@@ -53,3 +53,21 @@ interface CommentInputType {
   comment: string;
   comment_id?: string;
 }
+
+interface MovieInputType {
+  title: string;
+  description: string;
+  year: string;
+  release_date: string;
+  runtime: string;
+  genres: Record<string, string>;
+  image_id: string;
+};
+
+interface MovieInsertResponseType {
+  error: boolean;
+  id: number;
+  movies_genres: Record<string, string>;
+  message: string;
+};
+

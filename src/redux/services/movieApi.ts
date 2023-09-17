@@ -103,6 +103,15 @@ export const moviesApi = createApi({
       }),
       invalidatesTags: ["Single-Movie", "All-Movies"],
     }),
+
+    addNewMovie: builder.mutation<MovieInsertResponseType | CustomErrorType, MovieInputType> ({
+      query: (movieInputData) => ({
+        url: `/admin/movie/add`,
+        method: "POST",
+        data: movieInputData,
+      }),
+      invalidatesTags: ["Single-Movie", "All-Movies"],
+    }),
   }),
 });
 
@@ -117,4 +126,5 @@ export const {
   useCreateRatingMutation,
   useManageFavoriteMutation,
   useAddMovieCommentMutation,
+  useAddNewMovieMutation,
 } = moviesApi;

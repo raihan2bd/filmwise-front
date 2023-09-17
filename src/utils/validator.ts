@@ -129,4 +129,110 @@ export const validateFullName = (fullName: string, minLength: number = 5, maxLen
   };
 };
 
+export const validateYear = (year: string): EmailValidationResult => {
+  // Regular expression pattern for a valid year (four digits)
+  const yearPattern = /^\d{4}$/;
 
+  if (!yearPattern.test(year)) {
+    return {
+      isValid: false,
+      errorMsg: 'Invalid year format. Please enter a valid four-digit year.',
+    };
+  }
+
+  return {
+    isValid: true,
+  };
+};
+
+interface TitleValidationResult {
+  isValid: boolean;
+  errorMsg?: string;
+}
+
+export const validateTitle = (title: string, minLength: number = 3, maxLength: number = 255): TitleValidationResult => {
+  if (title.length < minLength) {
+    return {
+      isValid: false,
+      errorMsg: `Title must be at least ${minLength} characters long.`,
+    };
+  }
+
+  if (title.length > maxLength) {
+    return {
+      isValid: false,
+      errorMsg: `Title cannot exceed ${maxLength} characters.`,
+    };
+  }
+
+  return {
+    isValid: true,
+  };
+};
+
+export const validateMovieYear = (year: number, maxYear:number = 2050, minYear:number = 1900): TitleValidationResult => {
+  if (year.toString.length > 4) {
+    return {
+      isValid: false,
+      errorMsg: `Year must be a four-digit number.`,
+    }
+  }
+    if (year > maxYear) {
+      return {
+        isValid: false,
+        errorMsg: `Year cannot exceed ${maxYear}.`,
+      };
+    }
+
+    if (year < minYear) {
+      return {
+        isValid: false,
+        errorMsg: `Year cannot be less than ${minYear}.`,
+      }
+    }
+
+    return { 
+      isValid: true,
+     }
+    
+  }
+
+  export const validateRuntime = (runtime: number, maxRuntime:number = 400, minRuntime:number = 50): TitleValidationResult => {
+    if (runtime > maxRuntime) {
+      return {
+        isValid: false,
+        errorMsg: `Runtime cannot exceed ${maxRuntime}.`,
+      };
+    }
+
+    if (runtime < minRuntime) {
+      return {
+        isValid: false,
+        errorMsg: `Runtime cannot be less than ${minRuntime}.`,
+      }
+    }
+
+    return { 
+      isValid: true,
+     }
+  }
+
+
+  export const validateImage = (image: File | null): TitleValidationResult => {
+    if (image == undefined) {
+      return {
+        isValid: false,
+        errorMsg: `Please upload an image.`,
+      }
+    }
+    const condition = image.type === 'image/jpeg' || image.type === 'image/png';
+    if (condition === false) {
+      return {
+        isValid: false,
+        errorMsg: `Please upload a valid image file in JPEG and PNG.`,
+      }
+    }
+    return { 
+      isValid: true,
+     }
+  };
