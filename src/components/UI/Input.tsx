@@ -1,7 +1,7 @@
 import React, { forwardRef, ForwardedRef, InputHTMLAttributes, LegacyRef } from 'react';
 
 type InputProps = {
-  name: string;
+  name: string | File | null;
   wrapperCls?: string;
   inputCls?: string;
   label?: string;
