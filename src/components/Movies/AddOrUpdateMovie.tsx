@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Input from '../UI/Input';
 import Button from '../UI/Button';
 import useInput from '../../hooks/useInput';
-import { validateTitle, validateMovieYear, validateRuntime  } from '../../utils/validator';
+import { validateTitle, validateMovieYear, validateRuntime, validateImage  } from '../../utils/validator';
 import { useAddNewMovieMutation } from '../../redux/services/movieApi';
 import { useGetAllGenresQuery } from '../../redux/services/genresApi';
+import useFileInput from '../../hooks/useFileInput';
 
 interface PropsType {
   movieId: number | null;
@@ -14,6 +15,7 @@ interface PropsType {
 const AddOrUpdateMovie = ({movieId}: PropsType) => {
   const [movieForm, setMovieForm] = useState({})
   const [movieGenres, setMovieGenres] = useState({})
+  const [moviePhotos, setMoviePhotos] = useState<File>()
 
   const [addNewMovie, {isLoading: loadingNewMovie}] = useAddNewMovieMutation()
   const {data: genres } = useGetAllGenresQuery()
@@ -44,6 +46,14 @@ const navigate = useNavigate()
     valueChangeHandler: titleChangeHandler,
     inputBlurHandler: titleBlurHandler,
   } = useInput(validateTitleInput);
+
+  const {
+    value: image,
+    errorMsg: imageError,
+    isTouched: isImageTouched,
+    valueChangeHandler: imageChangeHandler,
+    inputBlurHandler: imageBlurHandler,
+  } = useFileInput(validateImage)
 
   const {
     value: description,
@@ -110,6 +120,11 @@ const navigate = useNavigate()
     setReleaseDate(formattedDate.toString())
   }
 
+  const handleFileChange = (e :ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files![0]
+    setMoviePhotos(file)
+    // console.log(file)
+  }
 
   const handleOnSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -190,8 +205,9 @@ const navigate = useNavigate()
           </option>
         ))}
         </select>
-      
-
+        {/* <input type="file" name="Photo" id="Photos" /> */}
+        <Input type="file" name="Photos" id="Photos" onChange={imageChangeHandler} inputError={isImageTouched ? imageError : null} onBlur={imageBlurHandler} />
+        {imageError && <p className="text-red-500 text-sm">{imageError}</p>}
       <Button disabled={!formIsValid || loadingNewMovie} btnClass="my-3 block ms-auto" type='submit'>Submit</Button>
     </form>
   )

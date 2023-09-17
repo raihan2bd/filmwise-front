@@ -218,3 +218,14 @@ export const validateMovieYear = (year: number, maxYear:number = 2050, minYear:n
   }
 
 
+  export const validateImage = (image: File | null): string | boolean => {
+    console.log(image);
+    if (image == undefined) {
+      return 'Please upload an image.';
+    }
+    const condition = image.type === 'image/jpeg' || image.type === 'image/png';
+    if (condition === false) {
+      return "Please upload a valid image file in JPEG and PNG."
+    }
+    return true;
+  };
