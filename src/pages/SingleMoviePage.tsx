@@ -12,8 +12,6 @@ import Modal from "../components/UI/Modal";
 import AddRating from "../components/Movies/AddRating";
 import DeleteMovie from "../components/Movies/DeleteMovie";
 
-const baseUrl = import.meta.env.VITE_API_BASE_URL;
-
 const SingleMoviePage = () => {
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -114,7 +112,7 @@ const SingleMoviePage = () => {
             <div className="max-w-[100%] md:max-w-[65%] flex flex-col items-center overflow-hidden">
               <img
                 className="max-w-[100%] h-auto"
-                src={`${baseUrl}${movie.image}`}
+                src={movie.image}
                 alt={movie.title}
               />
             </div>
