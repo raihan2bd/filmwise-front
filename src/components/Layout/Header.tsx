@@ -11,14 +11,17 @@ const Header = () => {
   const [showNav, setShowNav] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
-  const user = useAppSelector((state) => state.auth.user)
-  
+  const user = useAppSelector((state) => state.auth.user);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const toggleNavHandler = () => {
     setShowNav((prevState) => !prevState);
+  };
+
+  const hideNavHandler = () => {
+    setShowNav(false);
   };
 
   const showSearchHandler = () => {
@@ -31,9 +34,10 @@ const Header = () => {
 
   const submitSearchHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const value: string | undefined = searchInputRef.current?.value
-    if(value && value !== '') {
-      navigate(`/movies?s=${value}`)
+    const value: string | undefined = searchInputRef.current?.value;
+    setShowNav(false)
+    if (value && value !== "") {
+      navigate(`/movies?s=${value}`);
     }
   };
 
@@ -56,29 +60,48 @@ const Header = () => {
           }
         >
           <li>
-            <NavLink className="nav-link" to="/">
+            <NavLink className="nav-link" to="/" onClick={hideNavHandler}>
               Home
             </NavLink>
           </li>
           <li>
-            <NavLink className="nav-link" to="/movies">
+            <NavLink className="nav-link" to="/movies" onClick={hideNavHandler}>
               Movies
             </NavLink>
           </li>
           <li>
-            <NavLink className="nav-link" to="/about">
+            <NavLink className="nav-link" to="/about" onClick={hideNavHandler}>
               About
             </NavLink>
           </li>
-          {user?.role === 'admin' && <li><NavLink className="nav-link" to="/add-new-movie">
-              Add Movie
-            </NavLink></li> }
+          {user?.role === "admin" && (
+            <li>
+              <NavLink
+                className="nav-link"
+                to="/add-new-movie"
+                onClick={hideNavHandler}
+              >
+                Add Movie
+              </NavLink>
+            </li>
+          )}
           <li>
-            {!user || !user?.id ? <NavLink className="nav-link" to="/auth">
-              Login
-            </NavLink>: <Button btnClass="bg-red-500" onClick={() => dispatch(logoutAction())}>Logout</Button>}
+            {!user || !user?.id ? (
+              <NavLink className="nav-link" to="/auth" onClick={hideNavHandler}>
+                Login
+              </NavLink>
+            ) : (
+              <Button
+                btnClass="bg-red-500"
+                onClick={() => {
+                  setShowNav(false)
+                  dispatch(logoutAction())
+                }}
+              >
+                Logout
+              </Button>
+            )}
           </li>
-          
         </ul>
 
         <div className="sm-content">
@@ -110,7 +133,10 @@ const Header = () => {
             </div>
           )}
         </div>
-        <form  onSubmit={submitSearchHandler} className="search-item d-flex md-content">
+        <form
+          onSubmit={submitSearchHandler}
+          className="search-item d-flex md-content"
+        >
           <input
             className="search-input"
             type="search"
