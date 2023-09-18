@@ -28,6 +28,7 @@ type MyMovieGenres = {
 const AddOrUpdateMovie = ({ movieId }: PropsType) => {
   const [movieGenres, setMovieGenres] = useState<MyMovieGenres>({});
   const [imageId, setImageId] = useState<null | number>();
+  const [isUploading, setIsUploading] = useState(false)
 
   const [addNewMovie, { isLoading: loadingNewMovie }] =
     useAddNewMovieMutation();
@@ -128,19 +129,20 @@ const AddOrUpdateMovie = ({ movieId }: PropsType) => {
 
   const handleUploadImage = async () => {
     const form = new FormData();
-
+    
     const token = getTokenFromLocalStorage();
     if (!token) {
       return;
     }
-
+    
     const headers = {
       "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${token}`,
     };
-
+    
     form.append("image", image as File);
-
+    
+    setIsUploading(true)
     try {
       const response = await axios.post(`${baseApiUrl}/images/upload`, form, {
         headers,
@@ -149,6 +151,7 @@ const AddOrUpdateMovie = ({ movieId }: PropsType) => {
     } catch (error) {
       console.error("Error uploading image:", error);
     }
+    setIsUploading(false)
   };
 
   const handleOnSubmit = async (e: React.FormEvent) => {
@@ -216,11 +219,11 @@ const AddOrUpdateMovie = ({ movieId }: PropsType) => {
       )}
       {image && (
         <Button
-          disabled={imageId ? true : false}
+          disabled={imageId || isUploading? true : false}
           onClick={handleUploadImage}
           btnClass="me-auto block w-fit"
         >
-          Upload Image
+          {isUploading? 'Uploading..': 'Upload Image'}
         </Button>
       )}
       {!imageId && (
