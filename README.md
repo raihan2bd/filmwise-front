@@ -24,7 +24,7 @@
   - [📝 License ](#-license-)
 
 
-#Filmwise Front <a name="about-project"></a>
+# Filmwise Front <a name="about-project"></a>
 FilmWise: Your Ultimate Movie Hub. Experience movies like never before with FilmWise, the web application that lets you dive into detailed movie information, share your thoughts through comments and reviews, and connect with fellow cinephiles. Discover, discuss, and decide on your favorite films all in one place. if you want to see the `Back-end` part, you can click [here](https://github.com/raihan2bd/filmwise)
 
 ## 🛠 Built With <a name="built-with"></a>
@@ -89,7 +89,7 @@ git clone https://github.com/raihan2bd/filmwise-front.git
 - After that you need to create a `.env` file and then add an environment variable called `VITE_API_BASE_URL` this is the base (back-end) URL For Example ⬇️
   ```
   VITE_API_BASE_URL=http://localhost:4000/v1
-  ``
+  ```
 ### Install
 
 - To install all the npm packages navigate to the folder address on your terminal and enter the below command ⬇️
