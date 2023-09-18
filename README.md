@@ -75,10 +75,10 @@ To get a local copy up and running, follow these steps.
 ### Prerequisites
 
 In order to run this project you need:
-- First of all, To run the front-end you need to run the [back-end](https://github.com/raihan2bd/filmwise) on your local machine.
+- First of all, To run the front end you need to run the [back end](https://github.com/raihan2bd/filmwise) on your local machine.
 - Then Make sure you have installed [NodeJs](https://nodejs.org).
-- Then make sure you have installed [TypeScript]([https://](https://www.typescriptlang.org/)
-- Then make sure you have installed [React](https://reactjs.org/) on your local machine if you want to use this project locally.
+- Then make sure you have installed [TypeScript](https://www.typescriptlang.org/)
+- Make sure you have installed [React](https://reactjs.org/) on your local machine if you want to use this project locally.
 
 ### Setup
 
@@ -120,12 +120,18 @@ For deployment, you can use [Render](https://vercel.com/)
 - Twitter: [@raihan2bd](https://twitter.com/raihan2bd)
 - LinkedIn: [raihan2bd](https://linkedin.com/in/raihan2bd)
 
+👤 **Hassaan Baig**
+
+- GitHub: [@Hassaanjbaig](https://github.com/Hassaanjbaig-code/)
+- LinkedIn [Hassan Baig](https://linkedin.com/in/hassaan-jawwad=baig)
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 ## 🔭 Future Features <a name="future-features"></a>
 
 - [ ] **Improve user experience**
+- [ ] **Add edit movie functionality**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
