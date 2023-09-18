@@ -6,7 +6,6 @@ import 'react-alice-carousel/lib/alice-carousel.css';
 
 const ImageSlider = () => {
   const {data: featureMovies, isSuccess, isLoading, isError} = useGetFeatureMoviesQuery();
-  const baseApiUrl = import.meta.env.VITE_API_BASE_URL
   let content;
   if (isLoading) {
     content = <p>Loading...</p>
@@ -16,7 +15,7 @@ const ImageSlider = () => {
     const items = featureMovies.movies.map((movie) => (
       <div key={movie.id} className={classes.slider_item} data-value={movie.id}>
         <div className={classes.slider_image}>
-          <img src={`${baseApiUrl}${movie.image}`} alt={movie.title} />
+          <img src={movie.image} alt={movie.title} />
         </div>
         <div className={classes.slider_title}>
           <a className={classes.slider_title_link} href={`/movies/${movie.id}`}>

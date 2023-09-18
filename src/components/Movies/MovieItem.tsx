@@ -10,7 +10,6 @@ interface PropsType {
 }
 
 const MovieItem = ({ item }: PropsType) => {
-  const baseApiUrl = import.meta.env.VITE_API_BASE_URL;
   const [manageFavorite, {isLoading: isFavLoading}] = useManageFavoriteMutation()
 
   const dispatch = useAppDispatch();
@@ -51,7 +50,7 @@ const MovieItem = ({ item }: PropsType) => {
       <div className="overflow-hidden max-w-[100%] h-80">
         <img
           className="h-full w-full"
-          src={`${baseApiUrl}${item.image}`}
+          src={item.image}
           alt={item.title}
         />
       </div>

@@ -28,6 +28,7 @@ type MyMovieGenres = {
 const AddOrUpdateMovie = ({ movieId }: PropsType) => {
   const [movieGenres, setMovieGenres] = useState<MyMovieGenres>({});
   const [imageId, setImageId] = useState<null | number>();
+  const [isUploading, setIsUploading] = useState(false);
 
   const [addNewMovie, { isLoading: loadingNewMovie }] =
     useAddNewMovieMutation();
@@ -141,6 +142,7 @@ const AddOrUpdateMovie = ({ movieId }: PropsType) => {
 
     form.append("image", image as File);
 
+    setIsUploading(true);
     try {
       const response = await axios.post(`${baseApiUrl}/images/upload`, form, {
         headers,
@@ -149,6 +151,7 @@ const AddOrUpdateMovie = ({ movieId }: PropsType) => {
     } catch (error) {
       console.error("Error uploading image:", error);
     }
+    setIsUploading(false);
   };
 
   const handleOnSubmit = async (e: React.FormEvent) => {
@@ -179,11 +182,15 @@ const AddOrUpdateMovie = ({ movieId }: PropsType) => {
   };
 
   let genresContent;
-  const genresArr = Object.keys(movieGenres)
-  if(genresArr.length> 0) {
+  const genresArr = Object.keys(movieGenres);
+  if (genresArr.length > 0) {
     genresContent = genresArr.map((item) => {
-      return (<span key={item} className="bg-black rounded p-2">{movieGenres[item]}</span>)
-    })
+      return (
+        <span key={item} className="bg-black rounded p-2">
+          {movieGenres[item]}
+        </span>
+      );
+    });
   }
 
   return (
@@ -216,11 +223,11 @@ const AddOrUpdateMovie = ({ movieId }: PropsType) => {
       )}
       {image && (
         <Button
-          disabled={imageId ? true : false}
+          disabled={imageId || isUploading ? true : false}
           onClick={handleUploadImage}
           btnClass="me-auto block w-fit"
         >
-          Upload Image
+          {isUploading ? "Uploading.." : "Upload Image"}
         </Button>
       )}
       {!imageId && (
@@ -236,17 +243,25 @@ const AddOrUpdateMovie = ({ movieId }: PropsType) => {
           />
         </>
       )}
-
-      <Input
-        name="Description"
-        label="Description"
-        placeholder="Enter the movie description here"
-        type="text"
-        value={description}
-        onChange={descriptionChangeHandler}
-        inputError={isDescriptionTouched ? descriptionError : null}
-        onBlur={descriptionBlurHandler}
-      />
+      <div className="my-2">
+        <label className="block my-1 text-sm" htmlFor={"description"}>
+          Desciption:{" "}
+          {isDescriptionTouched && descriptionError && (
+            <span className="ps-2 mb-3 p-4 text-red-500">
+              {descriptionError}
+            </span>
+          )}
+        </label>
+        <textarea
+          placeholder="Place your movie details here..."
+          rows={4}
+          name="description"
+          id="message"
+          className="w-full px-4 py-2 text-white bg-white/20"
+          onChange={descriptionChangeHandler}
+          onBlur={descriptionBlurHandler}
+        ></textarea>
+      </div>
       <Input
         name="Year"
         label="Year"
@@ -275,9 +290,11 @@ const AddOrUpdateMovie = ({ movieId }: PropsType) => {
         type="date"
         onChange={handleDateChange}
       />
-      
+
       <label>Genres</label>
-      <p className="bg-white/10 my-2 text-sm p-2 rounded-sm flex gap-1 flex-wrap">{genresContent}</p>
+      <p className="bg-white/10 my-2 text-sm p-2 rounded-sm flex gap-1 flex-wrap">
+        {genresContent}
+      </p>
       <select
         name="Genres"
         id="Genres"

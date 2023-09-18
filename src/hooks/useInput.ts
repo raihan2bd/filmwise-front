@@ -36,7 +36,7 @@ const useInput = (validateValue: (value: string) => string | null) => {
 
   const errorMsg = validateValue(inputState.value);
 
-  const valueChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+  const valueChangeHandler = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = event.target.value;
     dispatch({ type: 'INPUT', value });
   };

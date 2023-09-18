@@ -11,8 +11,6 @@ interface MovieCarouselItemProps {
   item: MovieType
 }
 
-const baseApiUrl = import.meta.env.VITE_API_BASE_URL
-
 const MovieCarouselItem = ({item}: MovieCarouselItemProps) => {
   const [manageFavorite, {isLoading: isFavLoading}] = useManageFavoriteMutation()
 
@@ -54,7 +52,7 @@ const MovieCarouselItem = ({item}: MovieCarouselItemProps) => {
         <div className="overflow-hidden max-w-[100%] h-80">
           <img
             className="h-full w-full"
-            src={`${baseApiUrl}${item.image}`}
+            src={item.image}
             alt={item.title}
           />
         </div>
