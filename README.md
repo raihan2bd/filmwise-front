@@ -64,7 +64,7 @@ FilmWise: Your Ultimate Movie Hub. Experience movies like never before with Film
 - Project Overview:
   update soon
 
-- [Live Demo Link](https://resort-booking-front-end-c8l1.onrender.com)
+- [Live Demo Link](https://filmwise-front.vercel.app/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
