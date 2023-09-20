@@ -160,7 +160,7 @@ const SingleMoviePage = () => {
                 <ul className="flex flex-wrap justify-center gap-2 list-none">
                   {Object.entries(movie.genres).map(([genreId, genreName]) => (
                     <li className="bg-white/5 rounded" key={genreId}>
-                      <Link className="p-2 block" to={`/genres/${genreId}`}>
+                      <Link className="p-2 block" to={`/movies?genre=${genreId}`}>
                         {genreName}
                       </Link>
                     </li>

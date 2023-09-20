@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import Header from "./Header";
+import Footer from "./Footer";
 
 type PropsTypes = {
   children?: ReactNode
@@ -10,9 +11,7 @@ const Layout = ({ children }: PropsTypes) => {
     <>
       <Header />
       <main className="main-container">{children}</main>
-      <footer className="footer">
-        <p>&copy; 2023 FilmWise, Inc. All Rights Reserved.</p>
-      </footer>
+      <Footer />
     </>
   );
 };
