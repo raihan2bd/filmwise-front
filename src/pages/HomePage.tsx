@@ -26,7 +26,7 @@ const HomePage = () => {
       </section>
 
       <section className={sectionClasses}>
-        <h2 className={titleClasses}>Drama Movies</h2>
+        <h2 className={titleClasses}>Mystery Movies</h2>
         <MysteryMovies />
       </section>
     </>
