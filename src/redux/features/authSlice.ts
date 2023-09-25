@@ -9,6 +9,8 @@ const logout = () => {
   return {
     user: null,
     userId: null,
+    hasLoginError: null,
+    hasSignupError: null,
   };
 };
 
@@ -67,6 +69,8 @@ export const fetchLogin = createAsyncThunk(
       return {
         user,
         userId: null,
+        hasLoginError: null,
+        hasSignupError: null,
       };
     } catch (err) {
       const error: AxiosError<CustomAxiosErrorType | any> = err as any;
@@ -75,9 +79,8 @@ export const fetchLogin = createAsyncThunk(
       if (errResponse) {
         errMsg = errResponse.message;
       }
-      console.log(errMsg);
 
-      return;
+      return { hasLoginError: errMsg, hasSignupError: null };
     }
   }
 );
@@ -91,7 +94,11 @@ export const fetchSignup = createAsyncThunk(
         userPayload
       );
 
-      return { userId: response.data.id || 1 };
+      return {
+        userId: response.data.id || 1,
+        hasLoginError: null,
+        hasSignupError: null,
+      };
     } catch (err) {
       const error: AxiosError<CustomAxiosErrorType | any> = err as any;
       // Handle errors from the API without throwing an error
@@ -105,10 +112,10 @@ export const fetchSignup = createAsyncThunk(
         errorMsg = errorResponse.error.message;
       }
 
-      console.log(errorMsg);
-
       return {
         userId: null,
+        hasLoginError: null,
+        hasSignupError: errorMsg,
       };
     }
   }
@@ -119,6 +126,8 @@ export const fetchSignup = createAsyncThunk(
 const initialState: AuthStateType = {
   user: null,
   userId: null,
+  hasLoginError: null,
+  hasSignupError: null,
 };
 
 const authSlice = createSlice({
@@ -126,17 +135,25 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logoutAction() {
-      localStorage.removeItem('user')
-      return initialState
-    }
+      localStorage.removeItem("user");
+      return initialState;
+    },
   },
   extraReducers: (builder) => {
-
     builder.addCase(fetchSignup.fulfilled, (state, { payload }) => {
       if (payload.userId) {
-        return { ...state, userId: payload.userId };
+        return {
+          ...state,
+          userId: payload.userId,
+          hasLoginError: null,
+          hasSignupError: null,
+        };
       }
-      return initialState;
+      return {
+        ...initialState,
+        hasLoginError: payload.hasLoginError,
+        hasSignupError: payload.hasSignupError,
+      };
     });
 
     builder.addCase(fetchLogin.fulfilled, (state, { payload }) => {
@@ -145,12 +162,18 @@ const authSlice = createSlice({
           ...state,
           user: payload.user,
           userId: payload.userId,
+          hasLoginError: null,
+          hasSignupError: null,
         };
 
         return updatedState;
       }
 
-      return initialState;
+      return {
+        ...initialState,
+        hasLoginError: payload.hasLoginError,
+        hasSignupError: null,
+      };
     });
 
     builder.addCase(retriveToken.fulfilled, (state, { payload }) => {
@@ -159,6 +182,8 @@ const authSlice = createSlice({
           ...state,
           user: payload.user,
           userId: null,
+          hasLoginError: null,
+          hasSignupError: null,
         };
       }
 
@@ -167,7 +192,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { logoutAction } = authSlice.actions
+export const { logoutAction } = authSlice.actions;
 export const selectAuthToken = (state: { auth: AuthStateType }) =>
   state.auth.user?.token;
 

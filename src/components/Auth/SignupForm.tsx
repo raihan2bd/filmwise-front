@@ -14,6 +14,7 @@ type PropsType = {
 const SignupForm = ({ onSubmitHandler, redirectUrl }: PropsType) => {
   // Define validation functions for email and password
   const userId = useAppSelector((state) => state.auth.userId)
+  const hasSignupErr = useAppSelector((state) => state.auth.hasSignupError) // this is quick solution need to refactor latter
   const navigate = useNavigate()
 
   const validateNameInput = (value: string) => {
@@ -85,6 +86,7 @@ const SignupForm = ({ onSubmitHandler, redirectUrl }: PropsType) => {
       <h3 className="text-center text-white text-2xl font-bold my-2">
         Create a new accrount
       </h3>
+      {hasSignupErr && <p className="text-red-500 text-center p-4">{hasSignupErr}</p>}
       <Input
         name="name"
         label="Name"

@@ -4,6 +4,7 @@ import Button from '../UI/Button';
 import { Link } from 'react-router-dom';
 import { validateEmail, validatePassword } from '../../utils/validator';
 import useInput from '../../hooks/useInput'; // Import the useInput hook
+import { useAppSelector } from '../../hooks/typeHooks';
 
 type PropsType = {
   onSubmitHandler: (email: string, password: string) => void;
@@ -11,6 +12,9 @@ type PropsType = {
 };
 
 const LoginForm = ({ onSubmitHandler, redirectUrl }: PropsType) => {
+
+  const hasLoginErr = useAppSelector((state) => state.auth.hasLoginError)
+
   // Define validation functions for email and password
   const validateEmailInput = (value: string) => {
     const isEmail = validateEmail(value);
@@ -62,6 +66,7 @@ const LoginForm = ({ onSubmitHandler, redirectUrl }: PropsType) => {
       <h3 className="text-center text-white text-2xl font-bold my-2">
         Login to your account
       </h3>
+      {hasLoginErr && <p className="text-red-500 text-center p-4">{hasLoginErr}</p>}
       <Input
         name="email"
         label="Email"

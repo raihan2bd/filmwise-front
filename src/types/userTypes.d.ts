@@ -9,6 +9,8 @@ interface UserType {
 interface AuthStateType {
   user: UserType | null
   userId: number | string | null
+  hasLoginError: null | string
+  hasSignupError: null | string
 }
 
 interface UserSignupDataType {
