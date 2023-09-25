@@ -101,7 +101,7 @@ interface FullNameValidationResult {
 
 export const validateFullName = (fullName: string, minLength: number = 5, maxLength: number = 55): FullNameValidationResult => {
   // Regular expression pattern for full name
-  const fullNamePattern = /^([A-Z][a-z]{1,})(\s[A-Z][a-z]{1,})+$/;
+  const fullNamePattern = /^[A-Za-z][A-Za-z0-9 ]*$/;
 
   if (fullName.length < minLength) {
     return {
@@ -128,6 +128,7 @@ export const validateFullName = (fullName: string, minLength: number = 5, maxLen
     isValid: true,
   };
 };
+
 
 export const validateYear = (year: string): EmailValidationResult => {
   // Regular expression pattern for a valid year (four digits)
